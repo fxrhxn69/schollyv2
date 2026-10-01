@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scholarship Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="app-style">
+:root{
+  --paper:#F3F5F9; --surface:#FFFFFF; --ink:#16233F; --ink-2:#4A5672; --line:#D8DEE9;
+  --accent:#2F54C8; --accent-ink:#FFFFFF; --soft:#E7ECF7;
+  --urgent:#C2372B; --urgent-bg:#FBE6E3; --warn:#9A6A00; --warn-bg:#FFF2CF; --ok:#1E7A4C; --ok-bg:#E1F3E9;
+  --muted:#8A93A8;
+  --shadow:0 1px 0 rgba(22,35,63,.06);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1626; --surface:#17213A; --ink:#E8ECF5; --ink-2:#AAB4CB; --line:#2A3654;
+    --accent:#7F9CFF; --accent-ink:#0F1626; --soft:#1F2B4A;
+    --urgent:#FF8A7F; --urgent-bg:#3A1D22; --warn:#F2C35B; --warn-bg:#3A3018; --ok:#6FD3A0; --ok-bg:#16352A;
+    --muted:#7480A0;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1626; --surface:#17213A; --ink:#E8ECF5; --ink-2:#AAB4CB; --line:#2A3654;
+  --accent:#7F9CFF; --accent-ink:#0F1626; --soft:#1F2B4A;
+  --urgent:#FF8A7F; --urgent-bg:#3A1D22; --warn:#F2C35B; --warn-bg:#3A3018; --ok:#6FD3A0; --ok-bg:#16352A;
+  --muted:#7480A0;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.top h1{margin:0;font-size:28px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.top p{margin:4px 0 0;color:var(--ink-2);font-size:14px}
+.save-state{font-size:13px;color:var(--muted);min-height:20px}
+
+/* Buttons */
+.btn{text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 14px;font-weight:600;font-size:14px;cursor:pointer;line-height:1.2}
+.btn:hover{border-color:var(--ink-2)}
+.btn:focus-visible,.icon-btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.row:focus-visible,.seg button:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{color:var(--urgent);border-color:var(--urgent)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn svg{width:16px;height:16px;flex:none}
+.icon-btn{border:0;background:transparent;border-radius:6px;padding:6px;cursor:pointer;color:var(--ink-2);display:inline-flex}
+.icon-btn:hover{background:var(--soft);color:var(--ink)}
+.icon-btn svg{width:20px;height:20px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Next deadline board */
+.board{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin-bottom:22px}
+.next{background:var(--ink);color:var(--paper);border-radius:14px;padding:22px 24px;display:flex;gap:22px;align-items:center;min-height:150px}
+:root[data-theme="dark"] .next{background:var(--soft);color:var(--ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .next{background:var(--soft);color:var(--ink)}}
+.flip{display:flex;gap:4px}
+.flip span{display:inline-grid;place-items:center;width:52px;height:72px;border-radius:6px;background:rgba(255,255,255,.1);font-size:46px;font-weight:800;position:relative;font-variant-numeric:tabular-nums}
+.flip span::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.35)}
+.next .meta{min-width:0}
+.next .k{font-size:13px;opacity:.75;margin:0}
+.next .t{font-size:20px;font-weight:700;margin:2px 0 4px;line-height:1.25}
+.next .s{font-size:14px;opacity:.8;margin:0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.stat{background:var(--surface);padding:14px 16px}
+.stat b{display:block;font-size:26px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--ink-2)}
+
+/* Toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;min-width:200px}
+select.f{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:9px 14px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* List */
+.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.list-head,.row{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.2fr) minmax(0,1fr) 110px 150px 40px;gap:14px;align-items:center;padding:12px 18px}
+.list-head{font-size:12px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+.row{border-bottom:1px solid var(--line);cursor:pointer}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--soft)}
+.row .name{font-weight:700;line-height:1.3}
+.row .uni{font-size:13px;color:var(--ink-2);margin-top:2px}
+.row .cell{font-size:14px;color:var(--ink-2)}
+.days{font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+.days small{display:block;font-size:12px;font-weight:500;color:var(--muted)}
+.days.urgent{color:var(--urgent)} .days.warn{color:var(--warn)} .days.past{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--ink-2);white-space:nowrap}
+.pill.s-Accepted{background:var(--ok-bg);color:var(--ok)}
+.pill.s-Rejected{background:var(--urgent-bg);color:var(--urgent)}
+.pill.s-Submitted,.pill.s-Under-Review,.pill.s-Interview-Scheduled{background:var(--warn-bg);color:var(--warn)}
+.status-sel{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 8px;font-size:13px;font-weight:600;max-width:100%}
+.empty{padding:48px 20px;text-align:center;color:var(--ink-2)}
+.empty h3{margin:0 0 6px;color:var(--ink);font-size:18px}
+
+/* Pipeline */
+.pipeline{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:12px;overflow-x:auto;padding-bottom:8px}
+.lane{background:var(--soft);border-radius:12px;padding:10px;min-height:160px}
+.lane h4{margin:2px 4px 10px;font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--ink-2)}
+.card .name{font-weight:700;font-size:14px;line-height:1.3}
+.card .uni{font-size:12px;color:var(--ink-2);margin:2px 0 8px}
+.card .foot{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px}
+.lane-move{display:flex;gap:4px}
+.lane-move button{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:2px 8px;cursor:pointer;font-weight:700}
+.lane-move button:hover{border-color:var(--ink-2)}
+
+/* Drawer & modal */
+.scrim{position:fixed;inset:0;background:rgba(15,22,38,.45);z-index:20;display:none}
+.scrim.open{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--surface);z-index:21;transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer.open{transform:none}
+.dr-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.dr-head h2{margin:0;font-size:20px;line-height:1.25}
+.dr-head p{margin:4px 0 0;color:var(--ink-2);font-size:14px}
+.dr-body{padding:6px 22px 22px;overflow:auto;flex:1}
+.dr-foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.sec{padding:16px 0;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:0}
+.sec h3{margin:0 0 10px;font-size:14px;color:var(--accent)}
+dl.kv{display:grid;grid-template-columns:minmax(120px,40%) 1fr;gap:6px 14px;margin:0;font-size:14px}
+dl.kv dt{color:var(--ink-2)}
+dl.kv dd{margin:0;word-break:break-word}
+.unv{color:var(--muted);font-style:italic}
+.docs{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:600}
+.chip .box{width:14px;height:14px;border:1.5px solid currentColor;border-radius:3px;display:inline-grid;place-items:center;font-size:10px;line-height:1}
+.note{background:var(--soft);border-radius:8px;padding:12px 14px;font-size:14px;white-space:pre-wrap}
+a{color:var(--accent)}
+
+.modal{position:fixed;inset:0;z-index:30;display:none;align-items:flex-start;justify-content:center;padding:max(24px,env(safe-area-inset-top,0px)) 12px 24px;overflow:auto}
+.modal.open{display:flex}
+.dialog{background:var(--surface);border-radius:14px;width:min(820px,100%);border:1px solid var(--line)}
+.dialog header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface);border-radius:14px 14px 0 0;z-index:1}
+.dialog header h2{margin:0;font-size:19px}
+.dialog .body{padding:4px 22px 10px}
+.dialog footer{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--surface);border-radius:0 0 14px 14px}
+fieldset{border:0;border-bottom:1px solid var(--line);margin:0;padding:16px 0}
+fieldset:last-child{border-bottom:0}
+legend{font-weight:700;color:var(--accent);font-size:14px;padding:0;margin-bottom:10px;float:left;width:100%}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;clear:both}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field.wide{grid-column:1/-1}
+.field label{font-size:13px;color:var(--ink-2);font-weight:600}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:8px 10px;width:100%}
+.field textarea{min-height:76px;resize:vertical}
+.hint{font-size:12px;color:var(--muted)}
+.err{color:var(--urgent);font-size:13px;margin:8px 0 0}
+
+.banner{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:14px;display:none}
+.banner.show{display:block}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:8px;font-size:14px;z-index:40;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* Seminars */
+.sem-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sem-tools p{margin:0;color:var(--ink-2);font-size:14px;max-width:62ch}
+.sem{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.sem:last-child{border-bottom:0}
+.sem.past{opacity:.55}
+.cal{border:1px solid var(--line);border-radius:10px;text-align:center;overflow:hidden;background:var(--surface)}
+.cal .m{background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700;padding:2px 0}
+.cal .d{font-size:26px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.cal .w{font-size:11px;color:var(--muted);padding-bottom:4px}
+.sem h4{margin:0;font-size:15px;line-height:1.3}
+.sem .o{font-size:13px;color:var(--ink-2);margin-top:2px}
+.sem .n{font-size:13px;color:var(--muted);margin-top:4px}
+.sem .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.sem .tag{font-size:11px;font-weight:600;background:var(--soft);color:var(--ink-2);border-radius:4px;padding:2px 6px}
+.sem .acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.on{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.how{background:var(--soft);border-radius:12px;padding:16px 18px;margin-top:16px;font-size:14px}
+.how h3{margin:0 0 6px;font-size:15px}
+.how ol{margin:6px 0 0;padding-left:20px}
+.how code{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:13px}
+.full{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--ok-bg);color:var(--ok);margin-left:6px;vertical-align:2px}
+@media (max-width:860px){
+  .sem{grid-template-columns:64px minmax(0,1fr)}
+  .sem .acts{grid-column:1/-1;justify-content:flex-start}
+}
+@media (max-width:860px){
+  .board{grid-template-columns:1fr}
+  .list-head{display:none}
+  .row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n d" "s s";row-gap:8px}
+  .row .c-name{grid-area:n} .row .c-days{grid-area:d;text-align:right}
+  .row .c-cov,.row .c-dead,.row .c-x{display:none} .row .c-status{grid-area:s}
+  .grid{grid-template-columns:1fr}
+  .flip span{width:42px;height:60px;font-size:36px}
+}
+@media (max-width:560px){
+  .next{flex-direction:column;align-items:flex-start;gap:14px}
+  .filters,.search,select.f{width:100%}
+  .top>div:last-child{text-align:left!important}
+}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}.toast{transition:none}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="application/json" id="tracker-data">{"entries": [{"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-BIL01", "last_updated": "2026-10-01", "application_status": "Researching", "priority_tier": null, "internal_notes": "Target intake: Autumn 2027. The scholarship deadline is the same as the admission deadline (1 March), and the scholarship letter must be uploaded with the admission application.\nScholarship GPA bar (4.0 on BI's 5-point ECTS scale) is higher than the admission bar (3.50 / B).\nAdmitted BI-Luiss students can ONLY get this scholarship, not other BI MSc scholarships. Only for a first master's degree.\nRecipients must act as 'BI Ambassadors'. Must keep 30 ECTS per semester and a cumulative B average to keep the award.\nYear 1 funded by BI, year 2 by Luiss.\nGMAT/GRE: one of the two is required (GMAT 600 / GMAT Focus 555 / GRE Quant 158), unless a waiver is granted.\n'Statement of Purpose' maps to the one-page scholarship application letter. Recommendation letters not verified.\nOpening date taken from a third-party listing (Mastersportal); confirm on bi.no. Application fee not found on official pages.\nSources checked 2026-10-01: scholarship page, programme page, admission requirements page, 2026-27 tuition fee page (all bi.no)."}, "university_profile": {"university_name": "BI Norwegian Business School (joint with Luiss University, Rome)", "country": "Norway (Year 1) / Italy (Year 2)", "city": "Oslo (Year 1) / Rome (Year 2)", "official_website": "https://www.bi.no/en/", "admissions_portal_url": "https://apply.bi.no/applicant", "institution_type": "Private Non-Profit"}, "scholarship_core": {"scholarship_name": "BI-Luiss Joint Masters in Marketing Scholarship", "scholarship_type": "Merit-Based", "degree_level": ["Master's"], "eligible_fields_of_study": ["Marketing (BI-Luiss Joint Masters in Marketing only)"], "scholarship_page_url": "https://www.bi.no/en/programmes-and-individual-courses/scholarships/bi-luiss-joint-masters-in-marketing-scholarship/"}, "financial_coverage": {"coverage_type": "Full Tuition", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": null, "currency": null}, "additional_allowances": {"health_insurance": false, "travel_airfare": false, "visa_costs_covered": false, "settling_in_allowance": false}, "estimated_out_of_pocket_expense": "Tuition covered: Year 1 at BI (NOK 179,400 for non-EU/EEA citizens, NOK 138,000 for EU/EEA, 2026-27 rates) and Year 2 at Luiss (EUR 15,000). Not covered: living costs (BI estimates NOK 151,690 per year in Oslo for 2026-27; Rome living costs not stated), Luiss regional tax (about EUR 200) and graduation fee (EUR 200), student organisation fee each semester, course reading, re-sit exams, flights, visa and insurance."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": "4.0 on BI's ECTS scale for the scholarship (admission minimum 3.50 / B); minimum C in Marketing, Statistics and Economics courses", "standardized_tests": {"gre_required": "Optional", "gmat_required": "Optional", "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": 6.5, "toefl_ibt_min": 90, "duolingo_min": null, "waiver_possible": true}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": ["Curriculum Vitae (CV)", "Statement of Purpose (SOP)", "Academic Transcripts"]}, "application_timeline": {"application_opening_date": "2026-11-01", "early_deadline": null, "final_deadline": "2027-03-01", "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-SE01", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Two steps. 1) Apply to up to four SI-eligible master's programmes on University Admissions. In the 2026 cycle that round ran 16 Oct 2025 to 15 Jan 2026. 2) Apply for the scholarship on the SI portal. In 2026 it was open 9 to 25 February (closes 14:59 CET).\nThe 2027 dates are projected from the 2026 cycle. Confirm them on si.se when the list of eligible programmes comes out (mid-November).\nNeeds work experience (3,000 hours for most countries, including Bangladesh) and leadership experience. Two reference letters, passport, CV, proof of work and leadership, and a motivation in the portal.\nNot eligible if you already hold a Swedish degree or had an SI scholarship before.\nNationality list is the 2026 list. It can change for 2027.\nsi.se blocked automated fetching during research, so details come from university and scholarship-listing pages that quote it."}, "university_profile": {"university_name": "Swedish Institute (any SI-eligible programme at a Swedish university)", "country": "Sweden", "city": "Various", "official_website": "https://si.se/en/", "admissions_portal_url": null, "institution_type": null}, "scholarship_core": {"scholarship_name": "SI Scholarship for Global Professionals (SISGP)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["All fields (SI-eligible programmes only)"], "scholarship_page_url": "https://si.se/en/apply/scholarships/swedish-institute-scholarships-for-global-professionals/"}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 12000, "currency": "SEK"}, "additional_allowances": {"health_insurance": true, "travel_airfare": true, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "Covered: full tuition (paid to the university), SEK 12,000 a month, a one-time SEK 15,000 travel grant, and insurance against illness and accident. Not covered: the University Admissions application fee."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Armenia", "Azerbaijan", "Bangladesh", "Belarus", "Bolivia", "Brazil", "Colombia", "Ecuador", "Egypt", "Ethiopia", "Georgia", "Guatemala", "Indonesia", "Iraq", "Jordan", "Kenya", "Liberia", "Malaysia", "Mexico", "Moldova", "Morocco", "Nigeria", "Peru", "Philippines", "Rwanda", "Senegal", "South Africa", "Tanzania", "Thailand", "Uganda", "Ukraine", "Vietnam", "Zambia"], "age_limit": null, "gender_preference": null}, "required_documentation": ["Curriculum Vitae (CV)", "Letters of Recommendation (LOR)", "Statement of Purpose (SOP)"]}, "application_timeline": {"application_opening_date": null, "early_deadline": "2027-01-15", "final_deadline": "2027-02-25", "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-SE02", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Female citizens of 10 countries only: Bangladesh, Indonesia, Kenya, Malaysia, Nigeria, Philippines, Rwanda, South Africa, Thailand, Vietnam.\nOnly for designated STEM master's programmes. The list changes each year; for example LTH (Lund) and Karlstad have had designated programmes.\nSame two-step route as other SI scholarships: University Admissions first, then the SI portal. You must be admitted on admissions announcement day.\nSI calls it fully funded and pays tuition directly to the university. The stipend amount and the 2027 deadlines were not confirmed during research, so they are left blank.\nNot eligible if you already hold a Swedish degree or had an SI scholarship before."}, "university_profile": {"university_name": "Swedish Institute (designated STEM programmes at Swedish universities)", "country": "Sweden", "city": "Various", "official_website": "https://si.se/en/", "admissions_portal_url": null, "institution_type": null}, "scholarship_core": {"scholarship_name": "SI Scholarship Pioneering Women in STEM", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["STEM (designated programmes only)"], "scholarship_page_url": "https://si.se/en/apply/scholarships/pioneeringwomeninstem/embed"}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": null, "currency": null}, "additional_allowances": {"health_insurance": null, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "Described by SI as fully funded. Tuition is paid directly to the university. Confirm the living allowance and travel grant on si.se."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Bangladesh", "Indonesia", "Kenya", "Malaysia", "Nigeria", "Philippines", "Rwanda", "South Africa", "Thailand", "Vietnam"], "age_limit": null, "gender_preference": "Women only"}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-EM01", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nConsortium: University of Gothenburg (lead, Sweden), UiT The Arctic University of Norway (Tromsø), University of Deusto (Spain), University of Roehampton (UK).\nDeadline is unclear for 2027. UiT lists 1 December; one listing says January 2027 (TBC). The programme website still shows an old (2023/24) notice.\nOne listing says EMJM scholarships are not yet confirmed for the 2027 intake. Check before you invest time."}, "university_profile": {"university_name": "University of Gothenburg (lead) with UiT Tromsø, Deusto and Roehampton", "country": "Sweden / Spain / UK / Norway", "city": "Gothenburg, Bilbao, London, Tromsø", "official_website": "https://www.emhrpp.com/", "admissions_portal_url": null, "institution_type": "Public"}, "scholarship_core": {"scholarship_name": "Erasmus Mundus Master in Human Rights Policy and Practice (EMHRPP)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["Human rights", "Policy"], "scholarship_page_url": "https://www.emhrpp.com/"}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 1400, "currency": "EUR"}, "additional_allowances": {"health_insurance": true, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "If awarded: tuition and participation costs (including 24 months of health insurance) covered, EUR 1,400 a month, plus a travel and installation contribution."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-EM02", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nFirst year at Aarhus University and the Danish School of Media and Journalism (Denmark). Second year at a partner, such as Amsterdam, Charles University, City St George's London or LMU Munich.\nSources conflict on deadline (10 January vs early December) and on how many EMJM scholarships are offered. Confirm on the Aarhus programme page."}, "university_profile": {"university_name": "Aarhus University (coordinator) and partner universities", "country": "Denmark + one partner country", "city": "Aarhus", "official_website": null, "admissions_portal_url": null, "institution_type": "Public"}, "scholarship_core": {"scholarship_name": "Erasmus Mundus Master in Journalism, Media and Globalisation (Mundus Journalism)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["Journalism", "Media"], "scholarship_page_url": null}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 1400, "currency": "EUR"}, "additional_allowances": {"health_insurance": null, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-EM03", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nCoordinated by Carl von Ossietzky University of Oldenburg (Germany). Consortium includes a partner in Norway, plus Czech Republic, Slovenia, Ghana, India, South Africa and Uganda.\nEdition 14 (2027 to 2029) is expected to open for applications in October 2026. Check how much of the programme is spent in Norway."}, "university_profile": {"university_name": "University of Oldenburg (coordinator) with a Norwegian partner", "country": "Germany / Norway / others", "city": "Various", "official_website": null, "admissions_portal_url": null, "institution_type": "Public"}, "scholarship_core": {"scholarship_name": "Erasmus Mundus Master in Migration and Intercultural Relations (EMMIR)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["Migration studies", "Intercultural relations"], "scholarship_page_url": null}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 1400, "currency": "EUR"}, "additional_allowances": {"health_insurance": null, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-EM04", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nHVDC and converter-based power systems engineering. Coordinated by Universitat Politècnica de Catalunya with partners in Belgium, Denmark and Sweden.\nNewly selected in July 2026. Applications expected in autumn 2026 for a September 2027 start. Website and dates not yet published."}, "university_profile": {"university_name": "Universitat Politècnica de Catalunya (coordinator) with Danish and Swedish partners", "country": "Spain / Belgium / Denmark / Sweden", "city": "Various", "official_website": null, "admissions_portal_url": null, "institution_type": "Public"}, "scholarship_core": {"scholarship_name": "Erasmus Mundus Master DCMAPS (HVDC and Converter-based Power Systems Engineering)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["Electrical power engineering"], "scholarship_page_url": null}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 1400, "currency": "EUR"}, "additional_allowances": {"health_insurance": null, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-EM05", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nSexology. Coordinated by Universidade Lusófona (Portugal) with partners in Spain and Sweden.\nNewly selected in July 2026. Applications expected in autumn 2026 for a September 2027 start. Website and dates not yet published."}, "university_profile": {"university_name": "Universidade Lusófona (coordinator) with a Swedish partner", "country": "Portugal / Spain / Sweden", "city": "Various", "official_website": null, "admissions_portal_url": null, "institution_type": null}, "scholarship_core": {"scholarship_name": "Erasmus Mundus Master EMSEX (Sexology)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["Sexology"], "scholarship_page_url": null}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 1400, "currency": "EUR"}, "additional_allowances": {"health_insurance": null, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}, {"scholarship_entry": {"tracker_meta": {"entry_id": "SCH-2026-EM06", "last_updated": "2026-10-01", "application_status": "Bookmarked", "priority_tier": null, "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nSemiconductor chips integration and innovation. Coordinated from Norway. Newly selected in July 2026. Website not yet announced."}, "university_profile": {"university_name": "Norwegian coordinating university (not yet announced)", "country": "Norway / others", "city": "Various", "official_website": null, "admissions_portal_url": null, "institution_type": null}, "scholarship_core": {"scholarship_name": "Erasmus Mundus Joint International Master in Semiconductor Chips Integration and Innovation (SSI2)", "scholarship_type": "Government-Sponsored", "degree_level": ["Master's"], "eligible_fields_of_study": ["Semiconductors", "Electronics"], "scholarship_page_url": null}, "financial_coverage": {"coverage_type": "Full Ride", "tuition_coverage_percentage": 100, "monthly_stipend": {"amount": 1400, "currency": "EUR"}, "additional_allowances": {"health_insurance": null, "travel_airfare": null, "visa_costs_covered": null, "settling_in_allowance": null}, "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."}, "eligibility_and_requirements": {"academic_requirements": {"minimum_gpa": null, "standardized_tests": {"gre_required": null, "gmat_required": null, "sat_act_required": false}}, "language_proficiency": {"ielts_min_overall": null, "toefl_ibt_min": null, "duolingo_min": null, "waiver_possible": null}, "demographic_restrictions": {"eligible_nationalities": ["Global / International"], "age_limit": null, "gender_preference": null}, "required_documentation": []}, "application_timeline": {"application_opening_date": null, "early_deadline": null, "final_deadline": null, "decision_announcement_date": null, "application_fee": {"amount": null, "currency": null, "fee_waiver_available": null}}}, "_progress": {"docs_ready": []}}], "seminars": [{"id": "sem-su-2026-10-01", "title": "Get to know Stockholm University (webinar)", "organizer": "Stockholm University", "date": "2026-10-01", "time": "", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Covers the application process. Held every other Thursday.", "registered": false}, {"id": "sem-sis-mena", "title": "Study in Sweden Online Fair: MENA/Africa", "organizer": "Study in Sweden (20+ Swedish universities)", "date": "2026-10-07", "time": "15:00–18:00", "timezone": "CEST", "mode": "Online", "location": "Online", "url": "https://www.uu.se/en/study/masters-studies/meet-us/events", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Chat live with Swedish universities.", "registered": false}, {"id": "sem-lund-apply", "title": "Get Ready to Apply for Master's Studies (webinar)", "organizer": "Lund University", "date": "2026-10-13", "time": "Two time slots", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.lunduniversity.lu.se/study/connect-us-about-studies/online/upcoming-virtual-events", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Application tips and live Q&A.", "registered": false}, {"id": "sem-su-2026-10-15", "title": "Get to know Stockholm University (webinar)", "organizer": "Stockholm University", "date": "2026-10-15", "time": "", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Covers the application process. Held every other Thursday.", "registered": false}, {"id": "sem-sis-americas", "title": "Study in Sweden Online Fair: Americas", "organizer": "Study in Sweden", "date": "2026-10-24", "time": "19:00–22:00", "timezone": "CEST", "mode": "Online", "location": "Online", "url": "https://www.uu.se/en/study/masters-studies/meet-us/events", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "", "registered": false}, {"id": "sem-su-2026-10-29", "title": "Get to know Stockholm University (webinar)", "organizer": "Stockholm University", "date": "2026-10-29", "time": "", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Covers the application process. Held every other Thursday.", "registered": false}, {"id": "sem-sis-europe", "title": "Study in Sweden Online Fair: Europe", "organizer": "Study in Sweden", "date": "2026-11-10", "time": "16:00–19:00", "timezone": "CET", "mode": "Online", "location": "Online", "url": "https://www.uu.se/en/study/masters-studies/meet-us/events", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "", "registered": false}, {"id": "sem-su-2026-11-12", "title": "Get to know Stockholm University (webinar)", "organizer": "Stockholm University", "date": "2026-11-12", "time": "", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Covers the application process. Held every other Thursday.", "registered": false}, {"id": "sem-lund-alumni", "title": "Lund Alumni Panel (YouTube Live)", "organizer": "Lund University", "date": "2026-11-17", "time": "", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.lunduniversity.lu.se/study/connect-us-about-studies/online/upcoming-virtual-events", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Ask alumni questions in the live chat.", "registered": false}, {"id": "sem-su-2026-11-26", "title": "Get to know Stockholm University (webinar)", "organizer": "Stockholm University", "date": "2026-11-26", "time": "", "timezone": "", "mode": "Online", "location": "Online", "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Covers the application process. Held every other Thursday.", "registered": false}, {"id": "sem-sis-apac", "title": "Study in Sweden Online Fair: Asia-Pacific", "organizer": "Study in Sweden", "date": "2026-11-28", "time": "11:00–14:00", "timezone": "CET", "mode": "Online", "location": "Online", "url": "https://www.uu.se/en/study/masters-studies/meet-us/events", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"], "source": "Research 2026-10-01", "notes": "Most relevant region for Bangladesh. One university page lists 11:00–19:00, so check the time.", "registered": false}], "sources": [{"url": "https://www.uu.se/en/study/masters-studies/meet-us/events", "organizer": "Uppsala University", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"]}, {"url": "https://www.lunduniversity.lu.se/study/connect-us-about-studies/online/upcoming-virtual-events", "organizer": "Lund University", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"]}, {"url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world", "organizer": "Stockholm University", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"]}, {"url": "https://www.his.se/en/education/admission/bachelor-master-programme-students/webinar/", "organizer": "University of Skövde", "related_entry_ids": ["SCH-2026-SE01", "SCH-2026-SE02"]}, {"url": "https://si.se/en/apply/scholarships/swedish-institute-scholarships-for-global-professionals/", "organizer": "Swedish Institute", "related_entry_ids": ["SCH-2026-SE01"]}, {"url": "https://www.emhrpp.com/", "organizer": "EMHRPP consortium", "related_entry_ids": ["SCH-2026-EM01"]}, {"url": "https://www.bi.no/en/programmes-and-individual-courses/master-programmes/biluiss-masters-in-marketing/", "organizer": "BI Norwegian Business School", "related_entry_ids": ["SCH-2026-BIL01"]}]}</script>
+<script id="app-script">
+(function(){
+"use strict";
+
+/* ---------- Schema options ---------- */
+var STATUSES=["Bookmarked","Researching","Drafting Documents","Submitted","Under Review","Interview Scheduled","Accepted","Rejected","Waitlisted"];
+var TIERS=["Tier 1 (Dream)","Tier 2 (Target)","Tier 3 (Safety)"];
+var INST=["Public","Private Non-Profit","Private For-Profit"];
+var STYPES=["Merit-Based","Need-Based","Government-Sponsored","Departmental","External/NGO"];
+var DEGREES=["Undergraduate","Master's","PhD","Postdoctoral"];
+var COVER=["Full Ride","Full Tuition","Partial Tuition","Fixed Grant","Stipend Only"];
+var DOCS=["Statement of Purpose (SOP)","Curriculum Vitae (CV)","Letters of Recommendation (LOR)","Academic Transcripts","Research Proposal","Financial Statement","Portfolio","Writing Sample"];
+
+/* Form field definitions: path into scholarship_entry */
+var FORM=[
+ {sec:"Tracking",fields:[
+  {p:"tracker_meta.application_status",l:"Status",t:"select",o:STATUSES},
+  {p:"tracker_meta.priority_tier",l:"Priority tier",t:"select",o:TIERS},
+  {p:"tracker_meta.internal_notes",l:"Notes",t:"textarea",w:1}]},
+ {sec:"University",fields:[
+  {p:"university_profile.university_name",l:"University",t:"text",req:1,w:1},
+  {p:"university_profile.country",l:"Country",t:"text"},
+  {p:"university_profile.city",l:"City",t:"text"},
+  {p:"university_profile.institution_type",l:"Institution type",t:"select",o:INST},
+  {p:"university_profile.official_website",l:"Official website",t:"url"},
+  {p:"university_profile.admissions_portal_url",l:"Admissions portal",t:"url",w:1}]},
+ {sec:"Scholarship",fields:[
+  {p:"scholarship_core.scholarship_name",l:"Scholarship name",t:"text",req:1,w:1},
+  {p:"scholarship_core.scholarship_type",l:"Scholarship type",t:"select",o:STYPES},
+  {p:"scholarship_core.degree_level",l:"Degree level",t:"multi",o:DEGREES},
+  {p:"scholarship_core.eligible_fields_of_study",l:"Eligible fields",t:"list",h:"Separate with commas",w:1},
+  {p:"scholarship_core.scholarship_page_url",l:"Scholarship page",t:"url",w:1}]},
+ {sec:"Funding",fields:[
+  {p:"financial_coverage.coverage_type",l:"Coverage type",t:"select",o:COVER},
+  {p:"financial_coverage.tuition_coverage_percentage",l:"Tuition covered (%)",t:"number",min:0,max:100},
+  {p:"financial_coverage.monthly_stipend.amount",l:"Monthly stipend",t:"number",min:0},
+  {p:"financial_coverage.monthly_stipend.currency",l:"Stipend currency",t:"text",h:"e.g. EUR"},
+  {p:"financial_coverage.additional_allowances.health_insurance",l:"Health insurance",t:"bool"},
+  {p:"financial_coverage.additional_allowances.travel_airfare",l:"Airfare",t:"bool"},
+  {p:"financial_coverage.additional_allowances.visa_costs_covered",l:"Visa costs",t:"bool"},
+  {p:"financial_coverage.additional_allowances.settling_in_allowance",l:"Settling-in allowance",t:"bool"},
+  {p:"financial_coverage.estimated_out_of_pocket_expense",l:"Out-of-pocket costs",t:"textarea",w:1}]},
+ {sec:"Eligibility",fields:[
+  {p:"eligibility_and_requirements.academic_requirements.minimum_gpa",l:"Minimum GPA",t:"text",w:1},
+  {p:"eligibility_and_requirements.academic_requirements.standardized_tests.gre_required",l:"GRE",t:"test"},
+  {p:"eligibility_and_requirements.academic_requirements.standardized_tests.gmat_required",l:"GMAT",t:"test"},
+  {p:"eligibility_and_requirements.academic_requirements.standardized_tests.sat_act_required",l:"SAT / ACT",t:"test"},
+  {p:"eligibility_and_requirements.language_proficiency.waiver_possible",l:"Language waiver",t:"bool"},
+  {p:"eligibility_and_requirements.language_proficiency.ielts_min_overall",l:"IELTS minimum",t:"number",step:"0.5",min:0,max:9},
+  {p:"eligibility_and_requirements.language_proficiency.toefl_ibt_min",l:"TOEFL iBT minimum",t:"number",min:0,max:120},
+  {p:"eligibility_and_requirements.language_proficiency.duolingo_min",l:"Duolingo minimum",t:"number",min:0,max:160},
+  {p:"eligibility_and_requirements.demographic_restrictions.age_limit",l:"Age limit",t:"number",min:0},
+  {p:"eligibility_and_requirements.demographic_restrictions.eligible_nationalities",l:"Eligible nationalities",t:"list",h:"Separate with commas",w:1},
+  {p:"eligibility_and_requirements.demographic_restrictions.gender_preference",l:"Gender preference",t:"text",w:1},
+  {p:"eligibility_and_requirements.required_documentation",l:"Required documents",t:"multi",o:DOCS,w:1}]},
+ {sec:"Timeline",fields:[
+  {p:"application_timeline.application_opening_date",l:"Opens",t:"date"},
+  {p:"application_timeline.early_deadline",l:"Early deadline",t:"date"},
+  {p:"application_timeline.final_deadline",l:"Final deadline",t:"date"},
+  {p:"application_timeline.decision_announcement_date",l:"Decision date",t:"date"},
+  {p:"application_timeline.application_fee.amount",l:"Application fee",t:"number",min:0},
+  {p:"application_timeline.application_fee.currency",l:"Fee currency",t:"text"},
+  {p:"application_timeline.application_fee.fee_waiver_available",l:"Fee waiver",t:"bool"}]}
+];
+
+/* ---------- State ---------- */
+var state=[],seminars=[],sources=[];
+function loadData(raw){
+  if(Array.isArray(raw)){state=raw;return}
+  raw=raw||{};state=Array.isArray(raw.entries)?raw.entries:[];seminars=Array.isArray(raw.seminars)?raw.seminars:[];sources=Array.isArray(raw.sources)?raw.sources:[];
+}
+try{loadData(JSON.parse(document.getElementById("tracker-data").textContent))}catch(e){}
+var LOCAL_KEY="scholarship-tracker-fallback";
+var ui={view:"list",q:"",status:"",tier:"",cov:"",sort:"deadline",open:null,semPast:false};
+try{var stashed=sessionStorage.getItem("st-ui");if(stashed){Object.assign(ui,JSON.parse(stashed));sessionStorage.removeItem("st-ui")}}catch(e){}
+var artifact=null, downloads=null, readOnly=false, saving=false, capChecked=false;
+
+/* ---------- Helpers ---------- */
+function get(o,p){return p.split(".").reduce(function(a,k){return a==null?undefined:a[k]},o)}
+function set(o,p,v){var ks=p.split("."),last=ks.pop(),t=o;ks.forEach(function(k){if(t[k]==null||typeof t[k]!=="object")t[k]={};t=t[k]});t[last]=v}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function todayISO(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function daysLeft(iso){if(!iso||!/^\d{4}-\d{2}-\d{2}$/.test(iso))return null;var t=new Date(todayISO()+"T00:00:00"),d=new Date(iso+"T00:00:00");return Math.round((d-t)/86400000)}
+function fmtDate(iso){if(!iso)return null;var d=new Date(iso+"T00:00:00");if(isNaN(d))return iso;return d.toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"})}
+function E(item){return item.scholarship_entry}
+function isClosed(st){return st==="Accepted"||st==="Rejected"}
+function blankEntry(){
+  var y=new Date().getFullYear(),n=state.length+1,id;
+  do{id="SCH-"+y+"-"+String(n).padStart(3,"0");n++}while(state.some(function(i){return E(i).tracker_meta.entry_id===id}));
+  return {scholarship_entry:{
+   tracker_meta:{entry_id:id,last_updated:todayISO(),application_status:"Bookmarked",priority_tier:null,internal_notes:""},
+   university_profile:{university_name:"",country:"",city:"",official_website:null,admissions_portal_url:null,institution_type:null},
+   scholarship_core:{scholarship_name:"",scholarship_type:null,degree_level:[],eligible_fields_of_study:[],scholarship_page_url:null},
+   financial_coverage:{coverage_type:null,tuition_coverage_percentage:null,monthly_stipend:{amount:null,currency:null},additional_allowances:{health_insurance:null,travel_airfare:null,visa_costs_covered:null,settling_in_allowance:null},estimated_out_of_pocket_expense:null},
+   eligibility_and_requirements:{academic_requirements:{minimum_gpa:null,standardized_tests:{gre_required:null,gmat_required:null,sat_act_required:null}},language_proficiency:{ielts_min_overall:null,toefl_ibt_min:null,duolingo_min:null,waiver_possible:null},demographic_restrictions:{eligible_nationalities:[],age_limit:null,gender_preference:null},required_documentation:[]},
+   application_timeline:{application_opening_date:null,early_deadline:null,final_deadline:null,decision_announcement_date:null,application_fee:{amount:null,currency:null,fee_waiver_available:null}}
+  },_progress:{docs_ready:[]}};
+}
+var ICON={
+ plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+ down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+ up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V9M7 14l5-5 5 5M5 4h14"/></svg>',
+ x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/></svg>',
+ trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+ copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>',
+ more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>'
+};
+
+/* ---------- Persistence ---------- */
+function canonicalDoc(){
+  var css=document.getElementById("app-style").textContent;
+  var js=document.getElementById("app-script").textContent;
+  var data=JSON.stringify({entries:state,seminars:seminars,sources:sources}).replace(/</g,"\\u003c");
+  return "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<title>Scholarship Tracker</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap\" rel=\"stylesheet\">\n<style id=\"app-style\">"+css+"</style>\n</head>\n<body>\n<div id=\"root\"></div>\n<script type=\"application/json\" id=\"tracker-data\">"+data+"<\/script>\n<script id=\"app-script\">"+js+"<\/script>\n</body>\n</html>\n";
+}
+function persist(msg){
+  if(readOnly){toast("This view is read-only.");return}
+  if(artifact){
+    saving=true;setSaveState("Saving…");
+    try{sessionStorage.setItem("st-ui",JSON.stringify({view:ui.view,q:ui.q,status:ui.status,tier:ui.tier,cov:ui.cov,sort:ui.sort,open:ui.open,semPast:ui.semPast}))}catch(e){}
+    artifact.publish(canonicalDoc()).then(function(){setSaveState("Saved")},function(err){
+      saving=false;var c=err&&err.code;
+      if(c==="conflict"){setSaveState("Updated elsewhere. Reloading…");return}
+      if(c==="not_writer"||c==="not_granted"||c==="not_declared"||c==="consent_required"||c==="capability_disabled"||c==="capability_removed"){setReadOnly();setSaveState("");return}
+      if(c==="rate_limited"){setSaveState("Too many saves. Wait a moment, then try again.");return}
+      if(c==="too_large"){setSaveState("Tracker is too large to save.");return}
+      setSaveState("Couldn't save. Try again.");
+    });
+  }else{
+    try{localStorage.setItem(LOCAL_KEY,JSON.stringify({entries:state,seminars:seminars,sources:sources}));setSaveState("Saved in this browser")}catch(e){setSaveState("Changes last until you close this page")}
+  }
+  if(msg)toast(msg);
+}
+function setReadOnly(){readOnly=true;var b=document.getElementById("ro");if(b)b.classList.add("show");render()}
+function setSaveState(t){var el=document.getElementById("save-state");if(el)el.textContent=t}
+
+/* ---------- Toast ---------- */
+var tt;function toast(m){var el=document.getElementById("toast");el.textContent=m;el.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){el.classList.remove("show")},2200)}
+
+/* ---------- Render shell ---------- */
+var root=document.getElementById("root");
+root.innerHTML=
+'<div class="wrap">'+
+ '<div class="top"><div><h1>Scholarship Tracker</h1><p>Deadlines, funding and paperwork for every application in one place.</p></div>'+
+ '<div style="text-align:right"><div class="actions" id="top-actions">'+
+  '<button class="btn" id="b-import" type="button">'+ICON.up+'Import JSON</button>'+
+  '<button class="btn" id="b-export" type="button">'+ICON.down+'Export JSON</button>'+
+  '<button class="btn primary" id="b-add" type="button">'+ICON.plus+'Add scholarship</button>'+
+ '</div><div class="save-state" id="save-state" aria-live="polite"></div></div></div>'+
+ '<div class="banner" id="ro">You can view this tracker but not edit it.</div>'+
+ '<section class="board" id="board" aria-label="Summary"></section>'+
+ '<div class="toolbar">'+
+  '<div class="filters">'+
+   '<input class="search" id="q" type="search" placeholder="Search university or scholarship" aria-label="Search">'+
+   '<select class="f" id="f-status" aria-label="Filter by status"><option value="">All statuses</option>'+STATUSES.map(function(s){return'<option>'+esc(s)+'</option>'}).join("")+'</select>'+
+   '<select class="f" id="f-tier" aria-label="Filter by tier"><option value="">All tiers</option>'+TIERS.map(function(s){return'<option>'+esc(s)+'</option>'}).join("")+'<option value="__none">No tier yet</option></select>'+
+   '<select class="f" id="f-cov" aria-label="Filter by funding"><option value="">All funding</option><option value="full">Full ride only</option><option value="other">Not full ride</option></select>'+
+   '<select class="f" id="f-sort" aria-label="Sort"><option value="deadline">Sort: nearest deadline</option><option value="name">Sort: name</option><option value="tier">Sort: tier</option><option value="updated">Sort: recently updated</option></select>'+
+  '</div>'+
+  '<div class="seg" role="group" aria-label="View"><button type="button" data-view="list">List</button><button type="button" data-view="pipeline">Pipeline</button><button type="button" data-view="seminars">Seminars</button></div>'+
+ '</div>'+
+ '<div id="content"></div>'+
+'</div>'+
+'<div class="scrim" id="scrim"></div>'+
+'<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title"></aside>'+
+'<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title"></div>'+
+'<input type="file" id="file-in" accept="application/json,.json" hidden>'+
+'<div class="toast" id="toast" role="status"></div>';
+
+var $=function(id){return document.getElementById(id)};
+$("q").value=ui.q;$("f-cov").value=ui.cov||"";$("f-cov").addEventListener("change",function(e){ui.cov=e.target.value;renderContent()});$("f-status").value=ui.status;$("f-tier").value=ui.tier;$("f-sort").value=ui.sort;
+$("q").addEventListener("input",function(e){ui.q=e.target.value;renderContent()});
+$("f-status").addEventListener("change",function(e){ui.status=e.target.value;renderContent()});
+$("f-tier").addEventListener("change",function(e){ui.tier=e.target.value;renderContent()});
+$("f-sort").addEventListener("change",function(e){ui.sort=e.target.value;renderContent()});
+document.querySelectorAll(".seg button").forEach(function(b){b.addEventListener("click",function(){ui.view=b.dataset.view;render()})});
+$("b-add").addEventListener("click",function(){openForm(null)});
+$("b-export").addEventListener("click",exportJSON);
+$("b-import").addEventListener("click",function(){$("file-in").click()});
+$("file-in").addEventListener("change",importJSON);
+$("scrim").addEventListener("click",closeAll);
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAll()});
+
+/* ---------- Filtering ---------- */
+function visible(){
+  var q=ui.q.trim().toLowerCase();
+  var arr=state.filter(function(it){var e=E(it);
+    if(ui.status&&e.tracker_meta.application_status!==ui.status)return false;
+    if(ui.tier==="__none"&&e.tracker_meta.priority_tier)return false;
+    if(ui.tier&&ui.tier!=="__none"&&e.tracker_meta.priority_tier!==ui.tier)return false;
+    if(ui.cov==="full"&&e.financial_coverage.coverage_type!=="Full Ride")return false;
+    if(ui.cov==="other"&&e.financial_coverage.coverage_type==="Full Ride")return false;
+    if(q){var hay=(e.scholarship_core.scholarship_name+" "+e.university_profile.university_name+" "+e.university_profile.country).toLowerCase();if(hay.indexOf(q)<0)return false}
+    return true});
+  var tierRank=function(t){var i=TIERS.indexOf(t);return i<0?9:i};
+  arr.sort(function(a,b){var A=E(a),B=E(b);
+    if(ui.sort==="name")return(A.scholarship_core.scholarship_name||"").localeCompare(B.scholarship_core.scholarship_name||"");
+    if(ui.sort==="tier")return tierRank(A.tracker_meta.priority_tier)-tierRank(B.tracker_meta.priority_tier);
+    if(ui.sort==="updated")return(B.tracker_meta.last_updated||"").localeCompare(A.tracker_meta.last_updated||"");
+    var da=daysLeft(A.application_timeline.final_deadline),db=daysLeft(B.application_timeline.final_deadline);
+    var ka=da==null?1e9:(da<0?5e8-da:da),kb=db==null?1e9:(db<0?5e8-db:db);return ka-kb});
+  return arr;
+}
+function daysHTML(e){
+  var d=daysLeft(e.application_timeline.final_deadline);
+  if(d==null)return'<div class="days past">—<small>No deadline</small></div>';
+  if(d<0)return'<div class="days past">Closed<small>'+esc(fmtDate(e.application_timeline.final_deadline))+'</small></div>';
+  var cls=d<=30?"urgent":(d<=90?"warn":"");
+  return'<div class="days '+cls+'">'+d+'<small>'+(d===1?"day left":"days left")+'</small></div>';
+}
+
+/* ---------- Render ---------- */
+function render(){
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.view===ui.view))});
+  ["b-add","b-import"].forEach(function(id){$(id).disabled=readOnly});
+  renderBoard();renderContent();
+}
+function renderBoard(){
+  var open=state.filter(function(it){return!isClosed(E(it).tracker_meta.application_status)});
+  var upcoming=[];open.forEach(function(it){var t=E(it).application_timeline;[["early",t.early_deadline],["final",t.final_deadline]].forEach(function(k){var d=daysLeft(k[1]);if(d!=null&&d>=0)upcoming.push({it:it,d:d,kind:k[0],date:k[1]})})});
+  upcoming.sort(function(a,b){return a.d-b.d});
+  var seenU={};upcoming=upcoming.filter(function(x){var id=E(x.it).tracker_meta.entry_id;if(seenU[id])return false;seenU[id]=1;return true});
+  var nx=upcoming[0];
+  var html='<div class="next">';
+  if(nx){var e=E(nx.it),digits=String(nx.d).padStart(3,"0").split("");
+    html+='<div class="flip num" aria-label="'+nx.d+' days">'+digits.map(function(c){return'<span>'+c+'</span>'}).join("")+'</div>'+
+    '<div class="meta"><p class="k">Days until your next deadline</p><p class="t">'+esc(e.scholarship_core.scholarship_name||"Untitled scholarship")+'</p><p class="s">'+esc(e.university_profile.university_name)+'. '+(nx.kind==="early"?'Early deadline ':'Due ')+esc(fmtDate(nx.date))+'.'+'</p></div>';
+  }else{
+    html+='<div class="meta"><p class="k">Next deadline</p><p class="t">No upcoming deadlines</p><p class="s">Add a scholarship with a final deadline to start the countdown.</p></div>';
+  }
+  html+='</div>';
+  var fullRides=state.filter(function(it){return E(it).financial_coverage.coverage_type==="Full Ride"}).length;
+  var upSem=seminars.filter(function(x){var d=daysLeft(x.date);return d!=null&&d>=0}).length;
+  var soon=upcoming.filter(function(x){return x.d<=30}).length;
+  html+='<div class="stats">'+
+   '<div class="stat"><b>'+state.length+'</b><span>Scholarships tracked</span></div>'+
+   '<div class="stat"><b>'+fullRides+'</b><span>Full rides</span></div>'+
+   '<div class="stat"><b>'+soon+'</b><span>Due within 30 days</span></div>'+
+   '<div class="stat"><b>'+upSem+'</b><span>Upcoming seminars</span></div></div>';
+  $("board").innerHTML=html;
+}
+function statusSelect(e,idx){
+  return'<select class="status-sel" data-idx="'+idx+'" aria-label="Change status"'+(readOnly?" disabled":"")+'>'+STATUSES.map(function(s){return'<option'+(s===e.tracker_meta.application_status?" selected":"")+'>'+esc(s)+'</option>'}).join("")+'</select>';
+}
+function renderContent(){
+  var c=$("content");
+  document.querySelector(".filters").style.display=ui.view==="seminars"?"none":"";
+  if(ui.view==="seminars"){renderSeminars(c);return}
+  var arr=visible();
+  if(!state.length){c.innerHTML='<div class="list"><div class="empty"><h3>No scholarships yet</h3><p>Add your first one to start tracking deadlines.</p><button class="btn primary" type="button" id="e-add"'+(readOnly?" disabled":"")+'>'+ICON.plus+'Add scholarship</button></div></div>';var b=$("e-add");if(b)b.onclick=function(){openForm(null)};return}
+  if(!arr.length){c.innerHTML='<div class="list"><div class="empty"><h3>Nothing matches these filters</h3><p>Clear the search or pick a different status or tier.</p><button class="btn" type="button" id="e-clear">Clear filters</button></div></div>';$("e-clear").onclick=function(){ui.q="";ui.status="";ui.tier="";ui.cov="";$("q").value="";$("f-status").value="";$("f-tier").value="";$("f-cov").value="";renderContent()};return}
+  if(ui.view==="pipeline"){renderPipeline(c,arr);return}
+  c.innerHTML='<div class="list" role="list"><div class="list-head"><div>Scholarship</div><div>Coverage</div><div>Final deadline</div><div>Countdown</div><div>Status</div><div></div></div>'+
+   arr.map(function(it){var e=E(it),idx=state.indexOf(it);
+    return'<div class="row" role="listitem" tabindex="0" data-idx="'+idx+'">'+
+     '<div class="c-name"><div class="name">'+esc(e.scholarship_core.scholarship_name||"Untitled scholarship")+(e.financial_coverage.coverage_type==="Full Ride"?'<span class="full">Full ride</span>':'')+'</div><div class="uni">'+esc(e.university_profile.university_name)+(e.tracker_meta.priority_tier?', '+esc(e.tracker_meta.priority_tier):'')+'</div></div>'+
+     '<div class="cell c-cov">'+esc(e.financial_coverage.coverage_type||"—")+'</div>'+
+     '<div class="cell c-dead num">'+esc(fmtDate(e.application_timeline.final_deadline)||"—")+'</div>'+
+     '<div class="c-days">'+daysHTML(e)+'</div>'+
+     '<div class="c-status">'+statusSelect(e,idx)+'</div>'+
+     '<div class="c-x"><button class="icon-btn" type="button" data-open="'+idx+'" aria-label="Open details">'+ICON.more+'</button></div>'+
+    '</div>'}).join("")+'</div>';
+  bindRows(c);
+}
+function renderPipeline(c,arr){
+  var lanes=STATUSES;
+  c.innerHTML='<div class="pipeline">'+lanes.map(function(s,li){var items=arr.filter(function(it){return E(it).tracker_meta.application_status===s});
+   return'<div class="lane"><h4><span>'+esc(s)+'</span><span class="num">'+items.length+'</span></h4>'+items.map(function(it){var e=E(it),idx=state.indexOf(it),d=daysLeft(e.application_timeline.final_deadline);
+    return'<div class="card" tabindex="0" data-idx="'+idx+'"><div class="name">'+esc(e.scholarship_core.scholarship_name||"Untitled")+'</div><div class="uni">'+esc(e.university_profile.university_name)+'</div>'+
+    '<div class="foot"><span class="num">'+(d==null?"No deadline":d<0?"Closed":d+" days left")+'</span>'+
+    (readOnly?'':'<span class="lane-move">'+(li>0?'<button type="button" data-move="'+idx+'" data-dir="-1" aria-label="Move to '+esc(lanes[li-1])+'">‹</button>':'')+(li<lanes.length-1?'<button type="button" data-move="'+idx+'" data-dir="1" aria-label="Move to '+esc(lanes[li+1])+'">›</button>':'')+'</span>')+
+    '</div></div>'}).join("")+'</div>'}).join("")+'</div>';
+  c.querySelectorAll("[data-move]").forEach(function(b){b.addEventListener("click",function(ev){ev.stopPropagation();var i=+b.dataset.move,e=E(state[i]),k=STATUSES.indexOf(e.tracker_meta.application_status)+(+b.dataset.dir);if(k<0||k>=STATUSES.length)return;e.tracker_meta.application_status=STATUSES[k];e.tracker_meta.last_updated=todayISO();render();persist("Moved to "+STATUSES[k])})});
+  bindRows(c);
+}
+function bindRows(c){
+  c.querySelectorAll(".row,.card").forEach(function(r){
+    r.addEventListener("click",function(ev){if(ev.target.closest("select,button"))return;openDrawer(+r.dataset.idx)});
+    r.addEventListener("keydown",function(ev){if((ev.key==="Enter"||ev.key===" ")&&ev.target===r){ev.preventDefault();openDrawer(+r.dataset.idx)}});
+  });
+  c.querySelectorAll("[data-open]").forEach(function(b){b.addEventListener("click",function(){openDrawer(+b.dataset.open)})});
+  c.querySelectorAll(".status-sel").forEach(function(s){s.addEventListener("change",function(){var e=E(state[+s.dataset.idx]);e.tracker_meta.application_status=s.value;e.tracker_meta.last_updated=todayISO();render();persist("Status changed to "+s.value)})});
+}
+
+/* ---------- Drawer ---------- */
+function val(v,kind){
+  if(v===null||v===undefined||v===""||(Array.isArray(v)&&!v.length))return'<span class="unv">Unspecified</span>';
+  if(kind==="bool")return v===true?"Yes":v===false?"No":esc(v);
+  if(kind==="test")return v===true?"Required":v===false?"Not required":esc(v);
+  if(kind==="date")return esc(fmtDate(v));
+  if(kind==="url")return'<a href="'+esc(v)+'" target="_blank" rel="noopener">'+esc(v.replace(/^https?:\/\//,"").replace(/\/$/,""))+'</a>';
+  if(kind==="pct")return esc(v)+"%";
+  if(Array.isArray(v))return esc(v.join(", "));
+  return esc(v);
+}
+function kv(rows){return'<dl class="kv">'+rows.map(function(r){return'<dt>'+esc(r[0])+'</dt><dd>'+r[1]+'</dd>'}).join("")+'</dl>'}
+function openDrawer(idx){
+  var it=state[idx];if(!it)return;ui.open=idx;var e=E(it);
+  it._progress=it._progress||{docs_ready:[]};
+  var fc=e.financial_coverage,el=e.eligibility_and_requirements,tl=e.application_timeline,st=e.financial_coverage.monthly_stipend,fee=tl.application_fee;
+  var docs=el.required_documentation||[],ready=it._progress.docs_ready||[];
+  var docsHTML=docs.length?'<p class="hint" style="margin:0 0 8px">'+ready.filter(function(d){return docs.indexOf(d)>=0}).length+' of '+docs.length+' ready. Tap a document to mark it ready.</p><div class="docs">'+docs.map(function(d){var on=ready.indexOf(d)>=0;return'<button type="button" class="chip" data-doc="'+esc(d)+'" aria-pressed="'+on+'"'+(readOnly?" disabled":"")+'><span class="box">'+(on?"✓":"")+'</span>'+esc(d)+'</button>'}).join("")+'</div>':'<span class="unv">No documents listed</span>';
+  $("drawer").innerHTML=
+  '<div class="dr-head"><div><h2 id="dr-title">'+esc(e.scholarship_core.scholarship_name||"Untitled scholarship")+'</h2><p>'+esc(e.university_profile.university_name)+'</p></div><button class="icon-btn" type="button" id="dr-close" aria-label="Close">'+ICON.x+'</button></div>'+
+  '<div class="dr-body">'+
+   '<div class="sec"><h3>Status</h3>'+kv([["Status",'<span class="pill s-'+esc(e.tracker_meta.application_status).replace(/ /g,"-")+'">'+esc(e.tracker_meta.application_status)+'</span>'],["Priority tier",val(e.tracker_meta.priority_tier)],["Final deadline",val(tl.final_deadline,"date")],["Countdown",(function(){var d=daysLeft(tl.final_deadline);return d==null?'<span class="unv">Unspecified</span>':d<0?"Closed":d+" days left"})()],["Entry ID",esc(e.tracker_meta.entry_id)],["Last updated",val(e.tracker_meta.last_updated,"date")]])+'</div>'+
+   '<div class="sec"><h3>Documents checklist</h3>'+docsHTML+'</div>'+
+   '<div class="sec"><h3>Funding</h3>'+kv([["Coverage",val(fc.coverage_type)],["Tuition covered",val(fc.tuition_coverage_percentage,"pct")],["Monthly stipend",st.amount!=null?esc(st.amount+" "+(st.currency||"")):val(null)],["Health insurance",val(fc.additional_allowances.health_insurance,"bool")],["Airfare",val(fc.additional_allowances.travel_airfare,"bool")],["Visa costs",val(fc.additional_allowances.visa_costs_covered,"bool")],["Settling-in",val(fc.additional_allowances.settling_in_allowance,"bool")]])+(fc.estimated_out_of_pocket_expense?'<p class="note" style="margin-top:12px">'+esc(fc.estimated_out_of_pocket_expense)+'</p>':'')+'</div>'+
+   '<div class="sec"><h3>Eligibility</h3>'+kv([["Minimum GPA",val(el.academic_requirements.minimum_gpa)],["GRE",val(el.academic_requirements.standardized_tests.gre_required,"test")],["GMAT",val(el.academic_requirements.standardized_tests.gmat_required,"test")],["SAT / ACT",val(el.academic_requirements.standardized_tests.sat_act_required,"test")],["IELTS",val(el.language_proficiency.ielts_min_overall)],["TOEFL iBT",val(el.language_proficiency.toefl_ibt_min)],["Duolingo",val(el.language_proficiency.duolingo_min)],["Language waiver",val(el.language_proficiency.waiver_possible,"bool")],["Nationalities",val(el.demographic_restrictions.eligible_nationalities)],["Age limit",val(el.demographic_restrictions.age_limit)],["Gender preference",val(el.demographic_restrictions.gender_preference)],["Degree level",val(e.scholarship_core.degree_level)],["Fields",val(e.scholarship_core.eligible_fields_of_study)]])+'</div>'+
+   '<div class="sec"><h3>Timeline</h3>'+kv([["Opens",val(tl.application_opening_date,"date")],["Early deadline",val(tl.early_deadline,"date")],["Final deadline",val(tl.final_deadline,"date")],["Decision",val(tl.decision_announcement_date,"date")],["Application fee",fee.amount!=null?esc(fee.amount+" "+(fee.currency||"")):val(null)],["Fee waiver",val(fee.fee_waiver_available,"bool")]])+'</div>'+
+   '<div class="sec"><h3>University and links</h3>'+kv([["Location",val([e.university_profile.city,e.university_profile.country].filter(Boolean).join(", "))],["Type",val(e.university_profile.institution_type)],["Scholarship page",val(e.scholarship_core.scholarship_page_url,"url")],["Website",val(e.university_profile.official_website,"url")],["Admissions portal",val(e.university_profile.admissions_portal_url,"url")]])+'</div>'+
+   (function(){var rel=seminars.filter(function(x){return(x.related_entry_ids||[]).indexOf(e.tracker_meta.entry_id)>=0&&daysLeft(x.date)!=null&&daysLeft(x.date)>=0});if(!rel.length)return"";return'<div class="sec"><h3>Upcoming seminars</h3>'+kv(rel.slice(0,6).map(function(x){return[fmtDate(x.date),(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>':esc(x.title))]}))+'</div>'})()+
+   (e.tracker_meta.internal_notes?'<div class="sec"><h3>Notes</h3><p class="note">'+esc(e.tracker_meta.internal_notes)+'</p></div>':'')+
+  '</div>'+
+  '<div class="dr-foot"><button class="btn danger" type="button" id="dr-del"'+(readOnly?" disabled":"")+'>'+ICON.trash+'Delete</button><div class="actions"><button class="btn" type="button" id="dr-dup"'+(readOnly?" disabled":"")+'>'+ICON.copy+'Duplicate</button><button class="btn primary" type="button" id="dr-edit"'+(readOnly?" disabled":"")+'>'+ICON.edit+'Edit</button></div></div>';
+  $("drawer").classList.add("open");$("scrim").classList.add("open");
+  $("dr-close").onclick=closeAll;$("dr-close").focus();
+  $("dr-edit").onclick=function(){openForm(idx)};
+  $("dr-dup").onclick=function(){var copy=JSON.parse(JSON.stringify(state[idx]));var fresh=blankEntry();copy.scholarship_entry.tracker_meta.entry_id=fresh.scholarship_entry.tracker_meta.entry_id;copy.scholarship_entry.tracker_meta.application_status="Bookmarked";copy.scholarship_entry.tracker_meta.last_updated=todayISO();copy.scholarship_entry.scholarship_core.scholarship_name=(copy.scholarship_entry.scholarship_core.scholarship_name||"")+" (copy)";copy._progress={docs_ready:[]};state.push(copy);closeAll();render();persist("Duplicated")};
+  $("dr-del").onclick=function(){confirmDelete(idx)};
+  $("drawer").querySelectorAll("[data-doc]").forEach(function(b){b.addEventListener("click",function(){var d=b.dataset.doc,r=it._progress.docs_ready,i=r.indexOf(d);if(i>=0)r.splice(i,1);else r.push(d);openDrawer(idx);persist()})});
+}
+function closeAll(){$("drawer").classList.remove("open");$("scrim").classList.remove("open");$("modal").classList.remove("open");$("modal").innerHTML="";ui.open=null}
+
+/* ---------- Delete confirm ---------- */
+function confirmDelete(idx){
+  var e=E(state[idx]);
+  $("modal").innerHTML='<div class="dialog" style="width:min(440px,100%)"><header><h2 id="m-title">Delete this scholarship?</h2></header><div class="body"><p>'+esc(e.scholarship_core.scholarship_name||"This entry")+' and its document checklist will be removed from the tracker.</p></div><footer><button class="btn" type="button" id="m-cancel">Keep it</button><button class="btn primary" style="background:var(--urgent);border-color:var(--urgent)" type="button" id="m-ok">'+ICON.trash+'Delete</button></footer></div>';
+  $("modal").classList.add("open");$("m-cancel").focus();
+  $("m-cancel").onclick=function(){$("modal").classList.remove("open")};
+  $("m-ok").onclick=function(){state.splice(idx,1);closeAll();render();persist("Deleted")};
+}
+
+/* ---------- Form ---------- */
+function fieldHTML(f,e){
+  var v=get(e,f.p),id="f_"+f.p.replace(/\./g,"_"),wide=f.w?" wide":"";
+  var lab='<label for="'+id+'">'+esc(f.l)+(f.req?" *":"")+'</label>',hint=f.h?'<span class="hint">'+esc(f.h)+'</span>':"";
+  if(f.t==="select")return'<div class="field'+wide+'">'+lab+'<select id="'+id+'" data-p="'+f.p+'" data-t="select"><option value="">Unspecified</option>'+f.o.map(function(o){return'<option'+(o===v?" selected":"")+'>'+esc(o)+'</option>'}).join("")+'</select>'+hint+'</div>';
+  if(f.t==="bool")return'<div class="field'+wide+'">'+lab+'<select id="'+id+'" data-p="'+f.p+'" data-t="bool"><option value="">Unspecified</option><option value="true"'+(v===true?" selected":"")+'>Yes</option><option value="false"'+(v===false?" selected":"")+'>No</option></select></div>';
+  if(f.t==="test")return'<div class="field'+wide+'">'+lab+'<select id="'+id+'" data-p="'+f.p+'" data-t="test"><option value="">Unspecified</option><option value="true"'+(v===true?" selected":"")+'>Required</option><option value="false"'+(v===false?" selected":"")+'>Not required</option><option value="Optional"'+(v==="Optional"?" selected":"")+'>Optional</option></select></div>';
+  if(f.t==="textarea")return'<div class="field'+wide+'">'+lab+'<textarea id="'+id+'" data-p="'+f.p+'" data-t="text">'+esc(v||"")+'</textarea>'+hint+'</div>';
+  if(f.t==="list")return'<div class="field'+wide+'">'+lab+'<input id="'+id+'" data-p="'+f.p+'" data-t="list" value="'+esc((v||[]).join(", "))+'">'+hint+'</div>';
+  if(f.t==="multi")return'<div class="field'+wide+'"><label>'+esc(f.l)+'</label><div class="docs" data-p="'+f.p+'" data-t="multi">'+f.o.map(function(o){var on=(v||[]).indexOf(o)>=0;return'<button type="button" class="chip" data-opt="'+esc(o)+'" aria-pressed="'+on+'"><span class="box">'+(on?"✓":"")+'</span>'+esc(o)+'</button>'}).join("")+'</div></div>';
+  var type=f.t==="number"?"number":f.t==="date"?"date":f.t==="url"?"url":"text";
+  var extra=(f.min!=null?' min="'+f.min+'"':"")+(f.max!=null?' max="'+f.max+'"':"")+(f.step?' step="'+f.step+'"':(f.t==="number"?' step="any"':""))+(f.t==="url"?' placeholder="https://"':"");
+  return'<div class="field'+wide+'">'+lab+'<input id="'+id+'" type="'+type+'" data-p="'+f.p+'" data-t="'+f.t+'" value="'+esc(v==null?"":v)+'"'+extra+'>'+hint+'</div>';
+}
+function openForm(idx){
+  if(readOnly)return;
+  var isNew=idx==null,it=isNew?blankEntry():JSON.parse(JSON.stringify(state[idx])),e=E(it);
+  $("drawer").classList.remove("open");
+  $("modal").innerHTML='<div class="dialog"><header><h2 id="m-title">'+(isNew?"Add scholarship":"Edit scholarship")+'</h2><button class="icon-btn" type="button" id="m-x" aria-label="Close">'+ICON.x+'</button></header><form class="body" id="m-form" novalidate>'+
+   FORM.map(function(s){return'<fieldset><legend>'+esc(s.sec)+'</legend><div class="grid">'+s.fields.map(function(f){return fieldHTML(f,e)}).join("")+'</div></fieldset>'}).join("")+
+   '<p class="err" id="m-err" role="alert"></p></form><footer><button class="btn" type="button" id="m-cancel">Cancel</button><button class="btn primary" type="button" id="m-save">'+(isNew?"Add scholarship":"Save changes")+'</button></footer></div>';
+  $("modal").classList.add("open");$("scrim").classList.add("open");
+  var first=$("modal").querySelector("input,select");if(first)first.focus();
+  $("modal").querySelectorAll("[data-t=multi] .chip").forEach(function(b){b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",String(on));b.querySelector(".box").textContent=on?"✓":""})});
+  var cancel=function(){$("modal").classList.remove("open");$("modal").innerHTML="";if(!isNew&&idx!=null)openDrawer(idx);else closeAll()};
+  $("m-x").onclick=cancel;$("m-cancel").onclick=cancel;
+  $("m-save").onclick=function(){
+    var err=[];
+    $("modal").querySelectorAll("[data-p]").forEach(function(n){
+      var p=n.dataset.p,t=n.dataset.t,v;
+      if(t==="multi"){v=[].slice.call(n.querySelectorAll('.chip[aria-pressed="true"]')).map(function(b){return b.dataset.opt})}
+      else if(t==="list"){v=n.value.split(",").map(function(s){return s.trim()}).filter(Boolean)}
+      else if(t==="bool"){v=n.value===""?null:n.value==="true"}
+      else if(t==="test"){v=n.value===""?null:n.value==="Optional"?"Optional":n.value==="true"}
+      else if(t==="number"){v=n.value===""?null:Number(n.value);if(v!=null&&isNaN(v)){err.push(n.previousElementSibling.textContent+" must be a number");v=null}}
+      else if(t==="url"){v=n.value.trim()||null;if(v&&!/^https:\/\/\S+$/.test(v))err.push(n.previousElementSibling.textContent+" must start with https://")}
+      else{v=n.value.trim();if(v==="")v=(t==="text"&&/name$/.test(p))?"":null}
+      set(e,p,v);
+    });
+    if(!e.university_profile.university_name)err.push("University is required");
+    if(!e.scholarship_core.scholarship_name)err.push("Scholarship name is required");
+    if(err.length){$("m-err").textContent=err.join(". ")+".";return}
+    e.tracker_meta.last_updated=todayISO();
+    var keep=(it._progress&&it._progress.docs_ready)||[];it._progress={docs_ready:keep.filter(function(d){return(e.eligibility_and_requirements.required_documentation||[]).indexOf(d)>=0})};
+    var newIdx;
+    if(isNew){state.push(it);newIdx=state.length-1}else{state[idx]=it;newIdx=idx}
+    $("modal").classList.remove("open");$("modal").innerHTML="";
+    render();ui.open=newIdx;persist(isNew?"Scholarship added":"Changes saved");openDrawer(newIdx);
+  };
+}
+
+/* ---------- Seminars ---------- */
+function normT(t){return String(t||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}
+function mergeSeminars(list){
+  var n=0;(list||[]).forEach(function(x){
+    if(!x||!x.title||!x.date||!/^\d{4}-\d{2}-\d{2}$/.test(x.date))return;
+    var dup=seminars.some(function(y){return y.id===x.id||(y.date===x.date&&normT(y.title)===normT(x.title))});
+    if(dup)return;
+    seminars.push({id:x.id||("sem-"+Date.now().toString(36)+"-"+n),title:String(x.title).slice(0,200),organizer:x.organizer||"",date:x.date,time:x.time||"",timezone:x.timezone||"",mode:x.mode||"",location:x.location||"",url:(x.url&&/^https:\/\//.test(x.url))?x.url:null,related_entry_ids:Array.isArray(x.related_entry_ids)?x.related_entry_ids:[],source:x.source||"Imported",notes:x.notes||"",registered:!!x.registered});n++});
+  seminars.sort(function(a,b){return a.date.localeCompare(b.date)});return n;
+}
+function entryName(id){var it=state.filter(function(i){return E(i).tracker_meta.entry_id===id})[0];return it?(E(it).scholarship_core.scholarship_name||id):null}
+function renderSeminars(c){
+  var list=seminars.filter(function(x){var d=daysLeft(x.date);return ui.semPast?true:(d==null||d>=0)});
+  var mon=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],wk=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var html='<div class="sem-tools"><p>Webinars, fairs and info sessions for the schools on your list. Add them by hand, or import what the scraper collected.</p>'+
+   '<div class="actions"><button class="btn sm" type="button" id="s-past">'+(ui.semPast?"Hide past":"Show past")+'</button>'+
+   '<button class="btn sm" type="button" id="s-src">'+ICON.down+'Download scraper sources</button>'+
+   '<button class="btn sm" type="button" id="s-imp"'+(readOnly?" disabled":"")+'>'+ICON.up+'Import scraped seminars</button>'+
+   '<button class="btn sm primary" type="button" id="s-add"'+(readOnly?" disabled":"")+'>'+ICON.plus+'Add seminar</button></div></div>';
+  if(!list.length){html+='<div class="list"><div class="empty"><h3>No upcoming seminars</h3><p>Run the scraper and import its file, or add a seminar you found yourself.</p></div></div>'}
+  else{
+   html+='<div class="list">'+list.map(function(x){var i=seminars.indexOf(x),d=new Date(x.date+"T00:00:00"),dl=daysLeft(x.date),past=dl!=null&&dl<0;
+    var when=[x.time,x.timezone].filter(Boolean).join(" ");
+    var tags=(x.related_entry_ids||[]).map(entryName).filter(Boolean);
+    return'<div class="sem'+(past?" past":"")+'"><div class="cal" aria-hidden="true"><div class="m">'+mon[d.getMonth()]+'</div><div class="d">'+d.getDate()+'</div><div class="w">'+wk[d.getDay()]+'</div></div>'+
+     '<div><h4>'+esc(x.title)+'</h4><div class="o">'+esc([x.organizer,fmtDate(x.date),when||null,x.mode].filter(Boolean).join(", "))+(dl!=null&&dl>=0?(dl===0?". Today.":". In "+dl+(dl===1?" day.":" days.")):"")+'</div>'+
+     (x.notes?'<div class="n">'+esc(x.notes)+'</div>':'')+
+     (tags.length?'<div class="tags">'+tags.slice(0,3).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join("")+(tags.length>3?'<span class="tag">+'+(tags.length-3)+' more</span>':'')+'</div>':'')+'</div>'+
+     '<div class="acts">'+(x.url?'<a class="btn sm" href="'+esc(x.url)+'" target="_blank" rel="noopener">Open page</a>':'')+
+     '<button class="btn sm'+(x.registered?" on":"")+'" type="button" data-reg="'+i+'" aria-pressed="'+!!x.registered+'"'+(readOnly?" disabled":"")+'>'+(x.registered?"Registered":"Mark registered")+'</button>'+
+     '<button class="icon-btn" type="button" data-sdel="'+i+'" aria-label="Remove seminar"'+(readOnly?" disabled":"")+'>'+ICON.trash+'</button></div></div>'}).join("")+'</div>';
+  }
+  html+='<div class="how"><h3>How the seminar scraper works</h3>This page can\'t visit other websites by itself, because browsers block that for security. The scraper is a small Python script you run on your own computer.<ol>'+
+   '<li>Click <b>Download scraper sources</b>. It lists the event pages and scholarship links in this tracker.</li>'+
+   '<li>Run <code>python seminar_scraper.py --sources scraper_sources.json --out seminars.json</code>.</li>'+
+   '<li>Click <b>Import scraped seminars</b> and pick <code>seminars.json</code>. Duplicates are skipped.</li></ol></div>';
+  c.innerHTML=html;
+  $("s-past").onclick=function(){ui.semPast=!ui.semPast;renderContent()};
+  $("s-src").onclick=exportSources;
+  $("s-imp").onclick=function(){$("file-in").click()};
+  $("s-add").onclick=openSemForm;
+  c.querySelectorAll("[data-reg]").forEach(function(b){b.onclick=function(){var x=seminars[+b.dataset.reg];x.registered=!x.registered;renderContent();persist(x.registered?"Marked as registered":"Unmarked")}});
+  c.querySelectorAll("[data-sdel]").forEach(function(b){b.onclick=function(){var x=seminars[+b.dataset.sdel];seminars.splice(+b.dataset.sdel,1);render();persist("Removed "+x.title)}});
+}
+function openSemForm(){
+  if(readOnly)return;
+  var opts=state.map(function(it){var e=E(it);return'<button type="button" class="chip" data-opt="'+esc(e.tracker_meta.entry_id)+'" aria-pressed="false"><span class="box"></span>'+esc(e.scholarship_core.scholarship_name||e.tracker_meta.entry_id)+'</button>'}).join("");
+  $("modal").innerHTML='<div class="dialog" style="width:min(640px,100%)"><header><h2 id="m-title">Add seminar</h2><button class="icon-btn" type="button" id="m-x" aria-label="Close">'+ICON.x+'</button></header><form class="body" novalidate><fieldset><div class="grid">'+
+   '<div class="field wide"><label for="sf-title">Title *</label><input id="sf-title"></div>'+
+   '<div class="field"><label for="sf-org">Organizer</label><input id="sf-org"></div>'+
+   '<div class="field"><label for="sf-date">Date *</label><input id="sf-date" type="date"></div>'+
+   '<div class="field"><label for="sf-time">Time</label><input id="sf-time" placeholder="e.g. 15:00–16:00"></div>'+
+   '<div class="field"><label for="sf-tz">Time zone</label><input id="sf-tz" placeholder="e.g. CET"></div>'+
+   '<div class="field"><label for="sf-mode">Format</label><select id="sf-mode"><option>Online</option><option>In person</option><option>Hybrid</option></select></div>'+
+   '<div class="field"><label for="sf-url">Event page</label><input id="sf-url" type="url" placeholder="https://"></div>'+
+   '<div class="field wide"><label for="sf-notes">Notes</label><textarea id="sf-notes"></textarea></div>'+
+   '<div class="field wide"><label>Related scholarships</label><div class="docs" id="sf-rel">'+opts+'</div></div>'+
+   '</div></fieldset><p class="err" id="m-err" role="alert"></p></form><footer><button class="btn" type="button" id="m-cancel">Cancel</button><button class="btn primary" type="button" id="m-save">Add seminar</button></footer></div>';
+  $("modal").classList.add("open");$("scrim").classList.add("open");$("sf-title").focus();
+  $("sf-rel").querySelectorAll(".chip").forEach(function(b){b.onclick=function(){var on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",String(on));b.querySelector(".box").textContent=on?"✓":""}});
+  $("m-x").onclick=closeAll;$("m-cancel").onclick=closeAll;
+  $("m-save").onclick=function(){
+    var t=$("sf-title").value.trim(),d=$("sf-date").value,u=$("sf-url").value.trim(),err=[];
+    if(!t)err.push("Title is required");if(!d)err.push("Date is required");if(u&&!/^https:\/\/\S+$/.test(u))err.push("Event page must start with https://");
+    if(err.length){$("m-err").textContent=err.join(". ")+".";return}
+    var rel=[].slice.call($("sf-rel").querySelectorAll('.chip[aria-pressed="true"]')).map(function(b){return b.dataset.opt});
+    var n=mergeSeminars([{title:t,organizer:$("sf-org").value.trim(),date:d,time:$("sf-time").value.trim(),timezone:$("sf-tz").value.trim(),mode:$("sf-mode").value,url:u||null,notes:$("sf-notes").value.trim(),related_entry_ids:rel,source:"Added by hand"}]);
+    closeAll();render();persist(n?"Seminar added":"That seminar is already on the list");
+  };
+}
+function localDownload(name,text){try{var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:"application/json"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);return true}catch(e){return false}}
+function saveFile(name,text,okMsg){
+  if(!window.claude&&localDownload(name,text)){toast(okMsg);return}
+  if(downloads){downloads.save({filename:name,data:new Blob([text],{type:"application/json"})}).then(function(r){if(r&&r.status==="saved")toast(okMsg)},function(err){if(err&&err.code==="unavailable"){downloads=null}else if(err&&err.code!=="declined"&&err.code!=="cancelled")toast("Download didn't finish. Try again.")});return}
+  try{navigator.clipboard.writeText(text).then(function(){toast("Copied to clipboard. Paste it into "+name)},function(){toast("Downloads aren't available in this view")})}catch(e){toast("Downloads aren't available in this view")}
+}
+function exportSources(){
+  var seen={},out=[];
+  function add(u,org,id){if(!u||!/^https:\/\//.test(u))return;var k=u.replace(/\/$/,"");if(seen[k]){if(id&&seen[k].related_entry_ids.indexOf(id)<0)seen[k].related_entry_ids.push(id);return}seen[k]={url:u,organizer:org||"",related_entry_ids:id?[id]:[]};out.push(seen[k])}
+  sources.forEach(function(s){add(s.url,s.organizer);(s.related_entry_ids||[]).forEach(function(id){add(s.url,s.organizer,id)})});
+  state.forEach(function(it){var e=E(it),id=e.tracker_meta.entry_id,org=e.university_profile.university_name;add(e.scholarship_core.scholarship_page_url,org,id);add(e.university_profile.official_website,org,id)});
+  saveFile("scraper_sources.json",JSON.stringify({sources:out},null,2),"Downloaded scraper_sources.json");
+}
+
+/* ---------- Import / export ---------- */
+function exportJSON(){
+  var out=JSON.stringify(state.map(function(it){return{scholarship_entry:E(it)}}),null,2);
+  var name="scholarship_tracker_"+todayISO()+".json";
+  if(!window.claude&&localDownload(name,out)){toast("Exported "+name);return}
+  if(downloads){downloads.save({filename:name,data:new Blob([out],{type:"application/json"})}).then(function(r){if(r&&r.status==="saved")toast("Exported "+name)},function(err){if(err&&err.code==="unavailable"){downloads=null}else if(err&&err.code!=="declined"&&err.code!=="cancelled")toast("Export didn't finish. Try again.")});return}
+  try{navigator.clipboard.writeText(out).then(function(){toast("Export copied to clipboard")},function(){toast("Export isn't available in this view")})}catch(e){toast("Export isn't available in this view")}
+}
+function importJSON(ev){
+  var file=ev.target.files&&ev.target.files[0];ev.target.value="";if(!file)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var data=JSON.parse(r.result);
+      if(data&&!Array.isArray(data)&&Array.isArray(data.seminars)&&!Array.isArray(data.entries)){var n=mergeSeminars(data.seminars);render();persist(n?("Imported "+n+(n===1?" seminar":" seminars")):"No new seminars in that file");return}
+      if(data&&!Array.isArray(data)&&Array.isArray(data.entries)){if(Array.isArray(data.seminars))mergeSeminars(data.seminars);data=data.entries}
+      var arr=Array.isArray(data)?data:[data];
+      var added=0;
+      arr.forEach(function(x){var ent=x&&x.scholarship_entry?x.scholarship_entry:(x&&x.tracker_meta?x:null);if(!ent)return;
+        var base=E(blankEntry());var merged=deepMerge(base,ent);
+        if(state.some(function(i){return E(i).tracker_meta.entry_id===merged.tracker_meta.entry_id}))merged.tracker_meta.entry_id=E(blankEntry()).tracker_meta.entry_id;
+        state.push({scholarship_entry:merged,_progress:{docs_ready:[]}});added++});
+      if(!added){toast("No scholarship entries found in that file");return}
+      render();persist("Imported "+added+(added===1?" scholarship":" scholarships"));
+    }catch(e){toast("That file isn't valid JSON")}
+  };
+  r.readAsText(file);
+}
+function deepMerge(a,b){Object.keys(b||{}).forEach(function(k){if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==="object"&&!Array.isArray(a[k]))deepMerge(a[k],b[k]);else a[k]=b[k]});return a}
+
+/* ---------- Boot ---------- */
+render();
+if(ui.open!=null&&state[ui.open])openDrawer(ui.open);
+if(window.claude&&typeof window.claude.use==="function"){
+  window.claude.use("artifact").then(function(a){capChecked=true;artifact=a;
+    if(!a){try{var ls=localStorage.getItem(LOCAL_KEY);if(ls){loadData(JSON.parse(ls));render()}}catch(e){}}
+  },function(){capChecked=true});
+  window.claude.use("downloads").then(function(d){downloads=d},function(){});
+}else{
+  capChecked=true;
+  try{var ls=localStorage.getItem(LOCAL_KEY);if(ls){loadData(JSON.parse(ls));render()}}catch(e){}
+}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+[
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-BIL01",
+        "last_updated": "2026-10-01",
+        "application_status": "Researching",
+        "priority_tier": null,
+        "internal_notes": "Target intake: Autumn 2027. The scholarship deadline is the same as the admission deadline (1 March), and the scholarship letter must be uploaded with the admission application.\nScholarship GPA bar (4.0 on BI's 5-point ECTS scale) is higher than the admission bar (3.50 / B).\nAdmitted BI-Luiss students can ONLY get this scholarship, not other BI MSc scholarships. Only for a first master's degree.\nRecipients must act as 'BI Ambassadors'. Must keep 30 ECTS per semester and a cumulative B average to keep the award.\nYear 1 funded by BI, year 2 by Luiss.\nGMAT/GRE: one of the two is required (GMAT 600 / GMAT Focus 555 / GRE Quant 158), unless a waiver is granted.\n'Statement of Purpose' maps to the one-page scholarship application letter. Recommendation letters not verified.\nOpening date taken from a third-party listing (Mastersportal); confirm on bi.no. Application fee not found on official pages.\nSources checked 2026-10-01: scholarship page, programme page, admission requirements page, 2026-27 tuition fee page (all bi.no)."
+      },
+      "university_profile": {
+        "university_name": "BI Norwegian Business School (joint with Luiss University, Rome)",
+        "country": "Norway (Year 1) / Italy (Year 2)",
+        "city": "Oslo (Year 1) / Rome (Year 2)",
+        "official_website": "https://www.bi.no/en/",
+        "admissions_portal_url": "https://apply.bi.no/applicant",
+        "institution_type": "Private Non-Profit"
+      },
+      "scholarship_core": {
+        "scholarship_name": "BI-Luiss Joint Masters in Marketing Scholarship",
+        "scholarship_type": "Merit-Based",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Marketing (BI-Luiss Joint Masters in Marketing only)"
+        ],
+        "scholarship_page_url": "https://www.bi.no/en/programmes-and-individual-courses/scholarships/bi-luiss-joint-masters-in-marketing-scholarship/"
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Tuition",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": null,
+          "currency": null
+        },
+        "additional_allowances": {
+          "health_insurance": false,
+          "travel_airfare": false,
+          "visa_costs_covered": false,
+          "settling_in_allowance": false
+        },
+        "estimated_out_of_pocket_expense": "Tuition covered: Year 1 at BI (NOK 179,400 for non-EU/EEA citizens, NOK 138,000 for EU/EEA, 2026-27 rates) and Year 2 at Luiss (EUR 15,000). Not covered: living costs (BI estimates NOK 151,690 per year in Oslo for 2026-27; Rome living costs not stated), Luiss regional tax (about EUR 200) and graduation fee (EUR 200), student organisation fee each semester, course reading, re-sit exams, flights, visa and insurance."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": "4.0 on BI's ECTS scale for the scholarship (admission minimum 3.50 / B); minimum C in Marketing, Statistics and Economics courses",
+          "standardized_tests": {
+            "gre_required": "Optional",
+            "gmat_required": "Optional",
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": 6.5,
+          "toefl_ibt_min": 90,
+          "duolingo_min": null,
+          "waiver_possible": true
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": [
+          "Curriculum Vitae (CV)",
+          "Statement of Purpose (SOP)",
+          "Academic Transcripts"
+        ]
+      },
+      "application_timeline": {
+        "application_opening_date": "2026-11-01",
+        "early_deadline": null,
+        "final_deadline": "2027-03-01",
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-SE01",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Two steps. 1) Apply to up to four SI-eligible master's programmes on University Admissions. In the 2026 cycle that round ran 16 Oct 2025 to 15 Jan 2026. 2) Apply for the scholarship on the SI portal. In 2026 it was open 9 to 25 February (closes 14:59 CET).\nThe 2027 dates are projected from the 2026 cycle. Confirm them on si.se when the list of eligible programmes comes out (mid-November).\nNeeds work experience (3,000 hours for most countries, including Bangladesh) and leadership experience. Two reference letters, passport, CV, proof of work and leadership, and a motivation in the portal.\nNot eligible if you already hold a Swedish degree or had an SI scholarship before.\nNationality list is the 2026 list. It can change for 2027.\nsi.se blocked automated fetching during research, so details come from university and scholarship-listing pages that quote it."
+      },
+      "university_profile": {
+        "university_name": "Swedish Institute (any SI-eligible programme at a Swedish university)",
+        "country": "Sweden",
+        "city": "Various",
+        "official_website": "https://si.se/en/",
+        "admissions_portal_url": null,
+        "institution_type": null
+      },
+      "scholarship_core": {
+        "scholarship_name": "SI Scholarship for Global Professionals (SISGP)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "All fields (SI-eligible programmes only)"
+        ],
+        "scholarship_page_url": "https://si.se/en/apply/scholarships/swedish-institute-scholarships-for-global-professionals/"
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 12000,
+          "currency": "SEK"
+        },
+        "additional_allowances": {
+          "health_insurance": true,
+          "travel_airfare": true,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "Covered: full tuition (paid to the university), SEK 12,000 a month, a one-time SEK 15,000 travel grant, and insurance against illness and accident. Not covered: the University Admissions application fee."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Armenia",
+            "Azerbaijan",
+            "Bangladesh",
+            "Belarus",
+            "Bolivia",
+            "Brazil",
+            "Colombia",
+            "Ecuador",
+            "Egypt",
+            "Ethiopia",
+            "Georgia",
+            "Guatemala",
+            "Indonesia",
+            "Iraq",
+            "Jordan",
+            "Kenya",
+            "Liberia",
+            "Malaysia",
+            "Mexico",
+            "Moldova",
+            "Morocco",
+            "Nigeria",
+            "Peru",
+            "Philippines",
+            "Rwanda",
+            "Senegal",
+            "South Africa",
+            "Tanzania",
+            "Thailand",
+            "Uganda",
+            "Ukraine",
+            "Vietnam",
+            "Zambia"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": [
+          "Curriculum Vitae (CV)",
+          "Letters of Recommendation (LOR)",
+          "Statement of Purpose (SOP)"
+        ]
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": "2027-01-15",
+        "final_deadline": "2027-02-25",
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-SE02",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Female citizens of 10 countries only: Bangladesh, Indonesia, Kenya, Malaysia, Nigeria, Philippines, Rwanda, South Africa, Thailand, Vietnam.\nOnly for designated STEM master's programmes. The list changes each year; for example LTH (Lund) and Karlstad have had designated programmes.\nSame two-step route as other SI scholarships: University Admissions first, then the SI portal. You must be admitted on admissions announcement day.\nSI calls it fully funded and pays tuition directly to the university. The stipend amount and the 2027 deadlines were not confirmed during research, so they are left blank.\nNot eligible if you already hold a Swedish degree or had an SI scholarship before."
+      },
+      "university_profile": {
+        "university_name": "Swedish Institute (designated STEM programmes at Swedish universities)",
+        "country": "Sweden",
+        "city": "Various",
+        "official_website": "https://si.se/en/",
+        "admissions_portal_url": null,
+        "institution_type": null
+      },
+      "scholarship_core": {
+        "scholarship_name": "SI Scholarship Pioneering Women in STEM",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "STEM (designated programmes only)"
+        ],
+        "scholarship_page_url": "https://si.se/en/apply/scholarships/pioneeringwomeninstem/embed"
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": null,
+          "currency": null
+        },
+        "additional_allowances": {
+          "health_insurance": null,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "Described by SI as fully funded. Tuition is paid directly to the university. Confirm the living allowance and travel grant on si.se."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Bangladesh",
+            "Indonesia",
+            "Kenya",
+            "Malaysia",
+            "Nigeria",
+            "Philippines",
+            "Rwanda",
+            "South Africa",
+            "Thailand",
+            "Vietnam"
+          ],
+          "age_limit": null,
+          "gender_preference": "Women only"
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-EM01",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nConsortium: University of Gothenburg (lead, Sweden), UiT The Arctic University of Norway (Tromsø), University of Deusto (Spain), University of Roehampton (UK).\nDeadline is unclear for 2027. UiT lists 1 December; one listing says January 2027 (TBC). The programme website still shows an old (2023/24) notice.\nOne listing says EMJM scholarships are not yet confirmed for the 2027 intake. Check before you invest time."
+      },
+      "university_profile": {
+        "university_name": "University of Gothenburg (lead) with UiT Tromsø, Deusto and Roehampton",
+        "country": "Sweden / Spain / UK / Norway",
+        "city": "Gothenburg, Bilbao, London, Tromsø",
+        "official_website": "https://www.emhrpp.com/",
+        "admissions_portal_url": null,
+        "institution_type": "Public"
+      },
+      "scholarship_core": {
+        "scholarship_name": "Erasmus Mundus Master in Human Rights Policy and Practice (EMHRPP)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Human rights",
+          "Policy"
+        ],
+        "scholarship_page_url": "https://www.emhrpp.com/"
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 1400,
+          "currency": "EUR"
+        },
+        "additional_allowances": {
+          "health_insurance": true,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "If awarded: tuition and participation costs (including 24 months of health insurance) covered, EUR 1,400 a month, plus a travel and installation contribution."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-EM02",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nFirst year at Aarhus University and the Danish School of Media and Journalism (Denmark). Second year at a partner, such as Amsterdam, Charles University, City St George's London or LMU Munich.\nSources conflict on deadline (10 January vs early December) and on how many EMJM scholarships are offered. Confirm on the Aarhus programme page."
+      },
+      "university_profile": {
+        "university_name": "Aarhus University (coordinator) and partner universities",
+        "country": "Denmark + one partner country",
+        "city": "Aarhus",
+        "official_website": null,
+        "admissions_portal_url": null,
+        "institution_type": "Public"
+      },
+      "scholarship_core": {
+        "scholarship_name": "Erasmus Mundus Master in Journalism, Media and Globalisation (Mundus Journalism)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Journalism",
+          "Media"
+        ],
+        "scholarship_page_url": null
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 1400,
+          "currency": "EUR"
+        },
+        "additional_allowances": {
+          "health_insurance": null,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-EM03",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nCoordinated by Carl von Ossietzky University of Oldenburg (Germany). Consortium includes a partner in Norway, plus Czech Republic, Slovenia, Ghana, India, South Africa and Uganda.\nEdition 14 (2027 to 2029) is expected to open for applications in October 2026. Check how much of the programme is spent in Norway."
+      },
+      "university_profile": {
+        "university_name": "University of Oldenburg (coordinator) with a Norwegian partner",
+        "country": "Germany / Norway / others",
+        "city": "Various",
+        "official_website": null,
+        "admissions_portal_url": null,
+        "institution_type": "Public"
+      },
+      "scholarship_core": {
+        "scholarship_name": "Erasmus Mundus Master in Migration and Intercultural Relations (EMMIR)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Migration studies",
+          "Intercultural relations"
+        ],
+        "scholarship_page_url": null
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 1400,
+          "currency": "EUR"
+        },
+        "additional_allowances": {
+          "health_insurance": null,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-EM04",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nHVDC and converter-based power systems engineering. Coordinated by Universitat Politècnica de Catalunya with partners in Belgium, Denmark and Sweden.\nNewly selected in July 2026. Applications expected in autumn 2026 for a September 2027 start. Website and dates not yet published."
+      },
+      "university_profile": {
+        "university_name": "Universitat Politècnica de Catalunya (coordinator) with Danish and Swedish partners",
+        "country": "Spain / Belgium / Denmark / Sweden",
+        "city": "Various",
+        "official_website": null,
+        "admissions_portal_url": null,
+        "institution_type": "Public"
+      },
+      "scholarship_core": {
+        "scholarship_name": "Erasmus Mundus Master DCMAPS (HVDC and Converter-based Power Systems Engineering)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Electrical power engineering"
+        ],
+        "scholarship_page_url": null
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 1400,
+          "currency": "EUR"
+        },
+        "additional_allowances": {
+          "health_insurance": null,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-EM05",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nSexology. Coordinated by Universidade Lusófona (Portugal) with partners in Spain and Sweden.\nNewly selected in July 2026. Applications expected in autumn 2026 for a September 2027 start. Website and dates not yet published."
+      },
+      "university_profile": {
+        "university_name": "Universidade Lusófona (coordinator) with a Swedish partner",
+        "country": "Portugal / Spain / Sweden",
+        "city": "Various",
+        "official_website": null,
+        "admissions_portal_url": null,
+        "institution_type": null
+      },
+      "scholarship_core": {
+        "scholarship_name": "Erasmus Mundus Master EMSEX (Sexology)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Sexology"
+        ],
+        "scholarship_page_url": null
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 1400,
+          "currency": "EUR"
+        },
+        "additional_allowances": {
+          "health_insurance": null,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  },
+  {
+    "scholarship_entry": {
+      "tracker_meta": {
+        "entry_id": "SCH-2026-EM06",
+        "last_updated": "2026-10-01",
+        "application_status": "Bookmarked",
+        "priority_tier": null,
+        "internal_notes": "Full ride ONLY if you win the Erasmus Mundus (EMJM) scholarship. Under current Erasmus+ rules that is EUR 1,400 a month for up to 24 months, and scholarship holders cannot be charged tuition or other mandatory participation costs. Self-funded places are NOT full ride. Apply in the scholarship round, not the self-funded round. You can apply to at most three EMJMs in one year. \nSemiconductor chips integration and innovation. Coordinated from Norway. Newly selected in July 2026. Website not yet announced."
+      },
+      "university_profile": {
+        "university_name": "Norwegian coordinating university (not yet announced)",
+        "country": "Norway / others",
+        "city": "Various",
+        "official_website": null,
+        "admissions_portal_url": null,
+        "institution_type": null
+      },
+      "scholarship_core": {
+        "scholarship_name": "Erasmus Mundus Joint International Master in Semiconductor Chips Integration and Innovation (SSI2)",
+        "scholarship_type": "Government-Sponsored",
+        "degree_level": [
+          "Master's"
+        ],
+        "eligible_fields_of_study": [
+          "Semiconductors",
+          "Electronics"
+        ],
+        "scholarship_page_url": null
+      },
+      "financial_coverage": {
+        "coverage_type": "Full Ride",
+        "tuition_coverage_percentage": 100,
+        "monthly_stipend": {
+          "amount": 1400,
+          "currency": "EUR"
+        },
+        "additional_allowances": {
+          "health_insurance": null,
+          "travel_airfare": null,
+          "visa_costs_covered": null,
+          "settling_in_allowance": null
+        },
+        "estimated_out_of_pocket_expense": "If awarded: no tuition charged, EUR 1,400 a month."
+      },
+      "eligibility_and_requirements": {
+        "academic_requirements": {
+          "minimum_gpa": null,
+          "standardized_tests": {
+            "gre_required": null,
+            "gmat_required": null,
+            "sat_act_required": false
+          }
+        },
+        "language_proficiency": {
+          "ielts_min_overall": null,
+          "toefl_ibt_min": null,
+          "duolingo_min": null,
+          "waiver_possible": null
+        },
+        "demographic_restrictions": {
+          "eligible_nationalities": [
+            "Global / International"
+          ],
+          "age_limit": null,
+          "gender_preference": null
+        },
+        "required_documentation": []
+      },
+      "application_timeline": {
+        "application_opening_date": null,
+        "early_deadline": null,
+        "final_deadline": null,
+        "decision_announcement_date": null,
+        "application_fee": {
+          "amount": null,
+          "currency": null,
+          "fee_waiver_available": null
+        }
+      }
+    }
+  }
+]

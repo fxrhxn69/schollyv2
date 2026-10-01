@@ -1,0 +1,202 @@
+{
+  "seminars": [
+    {
+      "id": "sem-su-2026-10-01",
+      "title": "Get to know Stockholm University (webinar)",
+      "organizer": "Stockholm University",
+      "date": "2026-10-01",
+      "time": "",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Covers the application process. Held every other Thursday.",
+      "registered": false
+    },
+    {
+      "id": "sem-sis-mena",
+      "title": "Study in Sweden Online Fair: MENA/Africa",
+      "organizer": "Study in Sweden (20+ Swedish universities)",
+      "date": "2026-10-07",
+      "time": "15:00–18:00",
+      "timezone": "CEST",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.uu.se/en/study/masters-studies/meet-us/events",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Chat live with Swedish universities.",
+      "registered": false
+    },
+    {
+      "id": "sem-lund-apply",
+      "title": "Get Ready to Apply for Master's Studies (webinar)",
+      "organizer": "Lund University",
+      "date": "2026-10-13",
+      "time": "Two time slots",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.lunduniversity.lu.se/study/connect-us-about-studies/online/upcoming-virtual-events",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Application tips and live Q&A.",
+      "registered": false
+    },
+    {
+      "id": "sem-su-2026-10-15",
+      "title": "Get to know Stockholm University (webinar)",
+      "organizer": "Stockholm University",
+      "date": "2026-10-15",
+      "time": "",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Covers the application process. Held every other Thursday.",
+      "registered": false
+    },
+    {
+      "id": "sem-sis-americas",
+      "title": "Study in Sweden Online Fair: Americas",
+      "organizer": "Study in Sweden",
+      "date": "2026-10-24",
+      "time": "19:00–22:00",
+      "timezone": "CEST",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.uu.se/en/study/masters-studies/meet-us/events",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "",
+      "registered": false
+    },
+    {
+      "id": "sem-su-2026-10-29",
+      "title": "Get to know Stockholm University (webinar)",
+      "organizer": "Stockholm University",
+      "date": "2026-10-29",
+      "time": "",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Covers the application process. Held every other Thursday.",
+      "registered": false
+    },
+    {
+      "id": "sem-sis-europe",
+      "title": "Study in Sweden Online Fair: Europe",
+      "organizer": "Study in Sweden",
+      "date": "2026-11-10",
+      "time": "16:00–19:00",
+      "timezone": "CET",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.uu.se/en/study/masters-studies/meet-us/events",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "",
+      "registered": false
+    },
+    {
+      "id": "sem-su-2026-11-12",
+      "title": "Get to know Stockholm University (webinar)",
+      "organizer": "Stockholm University",
+      "date": "2026-11-12",
+      "time": "",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Covers the application process. Held every other Thursday.",
+      "registered": false
+    },
+    {
+      "id": "sem-lund-alumni",
+      "title": "Lund Alumni Panel (YouTube Live)",
+      "organizer": "Lund University",
+      "date": "2026-11-17",
+      "time": "",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.lunduniversity.lu.se/study/connect-us-about-studies/online/upcoming-virtual-events",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Ask alumni questions in the live chat.",
+      "registered": false
+    },
+    {
+      "id": "sem-su-2026-11-26",
+      "title": "Get to know Stockholm University (webinar)",
+      "organizer": "Stockholm University",
+      "date": "2026-11-26",
+      "time": "",
+      "timezone": "",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.su.se/english/education/meet-us/meet-us-online-and-around-the-world",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Covers the application process. Held every other Thursday.",
+      "registered": false
+    },
+    {
+      "id": "sem-sis-apac",
+      "title": "Study in Sweden Online Fair: Asia-Pacific",
+      "organizer": "Study in Sweden",
+      "date": "2026-11-28",
+      "time": "11:00–14:00",
+      "timezone": "CET",
+      "mode": "Online",
+      "location": "Online",
+      "url": "https://www.uu.se/en/study/masters-studies/meet-us/events",
+      "related_entry_ids": [
+        "SCH-2026-SE01",
+        "SCH-2026-SE02"
+      ],
+      "source": "Research 2026-10-01",
+      "notes": "Most relevant region for Bangladesh. One university page lists 11:00–19:00, so check the time.",
+      "registered": false
+    }
+  ]
+}
