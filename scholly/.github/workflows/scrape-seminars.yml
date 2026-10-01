@@ -1,0 +1,50 @@
+# Runs the seminar scraper on GitHub and saves the result in data/.
+# It runs every Monday, whenever the scraper or its sources change,
+# and when you press "Run workflow" on the repository's Actions tab.
+name: Scrape seminars
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"   # every Monday, 03:00 UTC (09:00 in Dhaka)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scraper/**"
+      - ".github/workflows/scrape-seminars.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-seminars
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r scraper/requirements.txt
+      - name: Run the tests
+        run: python -m unittest discover -s scraper/tests -v
+      - name: Scrape
+        env:
+          # Optional. Add it under Settings > Secrets and variables > Actions.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          python scraper/seminar_scraper.py --out data/seminars_scraped.json --verbose \
+            > data/scrape_log.txt 2>&1 || echo "The scraper stopped with an error." >> data/scrape_log.txt
+          cat data/scrape_log.txt
+      - name: Save the result
+        run: |
+          git config user.name "seminar-scraper"
+          git config user.email "seminar-scraper@users.noreply.github.com"
+          git add data/seminars_scraped.json data/scrape_log.txt
+          git diff --cached --quiet && exit 0
+          git commit -m "Update scraped seminars"
+          git pull --rebase origin main
+          git push
